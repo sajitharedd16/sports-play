@@ -1,9 +1,11 @@
 const http = require("http");
 const fs = require("fs");
 
+const args = require("minimist")(process.argv.slice(2));
 let homeContent = "";
 let projectContent = "";
 let registrationcontent = "";
+
 
 fs.readFile("home.html", (err, home) => {
   if (err) {
@@ -19,11 +21,11 @@ fs.readFile("project.html", (err, project) => {
   projectContent = project;
 
 });
-fs.readFile("project.html", (err, project) => {
+fs.readFile("registration.html", (err, registration) => {
   if (err) {
     throw err;
   }
-  registratonContent = registration;
+  registrationContent = registration;
 });
 
 http
