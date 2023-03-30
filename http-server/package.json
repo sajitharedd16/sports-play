@@ -1,11 +1,14 @@
 {
-  "name": "hello-world",
+  "name": "http-server",
   "version": "1.0.0",
-  "description": "my http-server application",
+  "description": "My http server application",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "sajitha",
+  "license": "ISC",
+  "dependencies": {
+    "eslint": "^8.36.0"
+  }
 }
