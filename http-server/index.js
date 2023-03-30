@@ -4,8 +4,6 @@ const fs = require("fs");
 const args = require("minimist")(process.argv.slice(2));
 let homeContent = "";
 let projectContent = "";
-let registrationcontent = "";
-
 
 fs.readFile("home.html", (err, home) => {
   if (err) {
@@ -19,14 +17,13 @@ fs.readFile("project.html", (err, project) => {
     throw err;
   }
   projectContent = project;
-
 });
 fs.readFile("registration.html", (err, registration) => {
-  if (err) {
-    throw err;
-  }
-  registrationContent = registration;
-});
+    if (err) {
+      throw err;
+    }
+    registrationContent = registration;
+  });
 
 http
   .createServer((request, response) => {
@@ -47,4 +44,4 @@ http
         break;
     }
   })
-  .listen(args['port']);
+  .listen(args['port']); 
