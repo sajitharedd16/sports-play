@@ -4,33 +4,25 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon js,ejs",
+    "start": "nodemon -e js,ejs",
     "start:prod": "node index.js",
     "pretest": "NODE_ENV=test npx sequelize-cli db:drop && NODE_ENV=test npx sequelize-cli db:create",
-    "test": "NODE_ENV=test jest --detectOpenHandles"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "cd .. && husky install todo-cli/.husky"
   },
-  "author": "Sajitha <sajithareddyaaleti16@gmail.com>",
+  "author": "sajitha",
   "license": "ISC",
-  "devDependencies": {
-    "cheerio": "^1.0.0-rc.12",
+  "dependencies": {
+    "ejs": "^3.1.9",
     "express": "^4.18.2",
+    "pg": "^8.10.0",
+    "sequelize": "^6.31.0"
+  },
+  "devDependencies": {
+    "husky": "^8.0.3",
     "jest": "^29.5.0",
-    "nodemon": "^2.0.21",
+    "nodemon": "^2.0.22",
     "sequelize-cli": "^6.6.0",
     "supertest": "^6.3.3"
-  },
-  "dependencies": {
-    "bcrypt": "^5.1.0",
-    "connect-ensure-login": "^0.1.1",
-    "connect-flash": "^0.1.1",
-    "cookie-parser": "^1.4.6",
-    "csurf": "^1.11.0",
-    "ejs": "^3.1.8",
-    "express-session": "^1.17.3",
-    "passport": "^0.6.0",
-    "passport-local": "^1.0.0",
-    "pg": "^8.10.0",
-    "sequelize": "^6.29.1",
-    "tiny-csrf": "^1.1.3"
   }
 }
