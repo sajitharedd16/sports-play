@@ -1,32 +1,5 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Todo App</title>
-  </head>
-  <body>
-    <header>
-      <h1>This is my Todo Application</h1>
-    </header>
-    <table>
-      <thead>
-        <tr>
-          <th>Todo Item</th>
-          <th>Completed</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Buy groceries</td>
-          <td>No</td>
-        </tr>
-        <tr>
-          <td>Walk the dog</td>
-          <td>Yes</td>
-        </tr>
-      </tbody>
-    </table>
-    <footer>
-      <h1>Built with Node.js</h1>
-    </footer>
-  </body>
-</html>
+<table>    
+    <% for(var i = 0; i<allTodos.length; i++) { %>
+    <tr><td><%= allTodos[i].title %> </td></tr>
+    <% } %> 
+</table>
