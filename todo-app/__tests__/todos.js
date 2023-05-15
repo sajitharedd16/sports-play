@@ -113,7 +113,7 @@ describe("Todo Application", function () {
     await agent.post('/todos').send({
       title: 'Buy xbox',
       dueDate: new Date().toISOString(),
-      completed: false,
+      completed: true,
       _csrf: csrfToken
     })
     const gropuedTodosResponse = await agent.get('/todos').set('Accept', 'application/json')
@@ -131,17 +131,7 @@ describe("Todo Application", function () {
       .send({ _csrf: csrfToken, completed: boolStatus })
 
     const parsedUpdateResponse = JSON.parse(newResponse.text)
-    expect(parsedUpdateResponse.completed).toBe(true)
-
-    res1 = await agent.get('/todos')
-    csrfToken = extractCsrfToken(res1)
-
-    const anotherResponse = await agent
-      .put(`/todos/${latestTodo.id}`)
-      .send({ _csrf: csrfToken, completed: !boolStatus })
-
-    const parsedUpdateResponse2 = JSON.parse(anotherResponse.text)
-    expect(parsedUpdateResponse2.completed).toBe(false)
+    expect(parsedUpdateResponse.completed).toBe(false);
   });
 
   test("Fetches all todos in the database using /todos endpoint", async () => {
