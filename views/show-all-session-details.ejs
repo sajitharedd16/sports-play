@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="csrf-token" content="<%= csrfToken %>" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="./css/styles.css" rel="stylesheet" />
+  <title>Sports Scheduler</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+    crossorigin="anonymous"></script>
+  <style>
+    section {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    body {
+      background: linear-gradient(120deg, #0d324d, #7f5a83);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 24% 24% 24% 24%;
+      grid-gap: 1%;
+    }
+    .player {
+      width: 96%;
+      height: 10vh;
+      border-radius: 32px;
+      box-shadow: 1px 2px 5px 0px black;
+      background-color: aliceblue;
+    }
+    #textName {
+      width: 95%;
+      height: 6vh;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 1px 2px 5px 0px black;
+    }
+    #textName:hover {
+      background-color: rgb(255, 245, 245);
+      transition: 0.7s;
+    }
+    .player:hover {
+      background-color: rgb(195, 195, 195);
+      transition: 0.5s;
+    }
+    .xMark:hover {
+      color: red;
+      transition: 0.5s;
+    }
+    #sportsNav {
+      display: inline-flex;
+      color: white;
+    }
+    #sportsNav li {
+      list-style: none;
+      padding: 7px;
+      margin-left: 18px;
+      cursor: pointer;
+    }
+    #sportsNav li:hover {
+      background-color: white;
+      border-radius: 32px;
+      color: black;
+      font-weight: bold;
+      transition: 0.7s;
+    }
+    #sportsNav li a {
+      text-decoration: none;
+    }
+    #feedback:hover {
+      color: black !important;
+    }
+  </style>
+  <script>
+    if (
+      window.performance &&
+      window.performance.navigation.type ==
+      window.performance.navigation.TYPE_BACK_FORWARD
+    ) {
+      window.location.replace(
+        `/all_session/:<%= sports_id %>/:<%= sports_name %>`
+      );
+    }
+    window.onpopstate = (event) => {
+      if (event) {
+        window.location.replace(
+          `/all_session/:<%= sports_id %>/:<%= sports_name %>`
+        );
+      }
+    };
+    var token = document
+      .querySelector('meta[name="csrf-token"]')
+      .getAttribute("content");
+    const deletesession = (id, sp_id, sp_name) => {
+      if (confirm("Are you sure to delete this session!")) {
+        fetch(`/session_des/:${id}/:${id}`, {
+          method: "delete",
+          headers: { "content-Type": "application/json" },
+          body: JSON.stringify({
+            _csrf: token,
+          }),
+        })
+          .then((res) => {
+            if (res.ok) {
+              //window.history.go(-2);
+              window.location.replace(`/all_session/:${sp_id}/:${sp_name}`);
+            }
+          })
+          .catch((err) => console.log(err));
+      }
+    };
+    const delete_player = (id, pl_id, value) => {
+      if (confirm("Are you sure!")) {
+        fetch(`/session_des/:${id}/del/:${pl_id}/:${value}`, {
+          method: "delete",
+          headers: { "content-Type": "application/json" },
+          body: JSON.stringify({
+            _csrf: token,
+          }),
+        })
+          .then((res) => {
+            if (res.ok) {
+              window.location.replace(`/session_des/:${id}`);
+            }
+          })
+          .catch((err) => console.log(err));
+      }
+    };
+  </script>
+</head>
+
+<body>
+  <nav class="navbar" style="background-color: black; position: sticky">
+    <div class="container-fluid">
+      <a href="/" class="navbar-brand fw-bold" style="color: yellow">Sports Scheduler</a>
+      <ul id="sportsNav">
+        <li onclick="window.location.href='/all_session/:<%= sports_id%>/:<%=sports_name%>'">
+          Back
+        </li>
+        <a id="feedback" target="_blank"
+          href="https://docs.google.com/forms/d/e/1FAIpQLSdJGb0MZEfUL_i6FJvHTOmOKF1B3GYWiVoKg-FFJEaSvfzBCg/viewform?usp=sf_link"
+          style="color: white;text-decoration: none;">
+          <li>Feedback</li>
+        </a>
+
+        </li>
+        <li onclick="window.location.href='/'">Sign out</li>
+      </ul>
+    </div>
+  </nav>
+  <%-
+    include("show_all_session_template.ejs",{data:one_session,userid:single_userid,admin:admin,sports_id:sports_id,sports_name:sports_name,session_id:session_id,csrfToken:csrfToken,players:get_players})
+    %>
+</body>
+
+</html>
