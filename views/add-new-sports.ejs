@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="csrf-token" content="<%= csrfToken %>">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sports Scheduler</title>
+
+  <head>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    </link>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+    <style>
+      body {
+        width: 100%;
+        height: 100vh;
+        background: linear-gradient(rgba(0, 0, 0, .3), rgba(0, 0, 0, 1)), url('./bg1.jpg');
+        background-size: cover;
+        background-position: center;
+      }
+      #sportsNav {
+        display: inline-flex;
+        color: white;
+      }
+      #sportsNav li {
+        list-style: none;
+        padding: 7px;
+        margin-left: 18px;
+        cursor: pointer;
+      }
+      #sportsNav li:hover {
+        background-color: white;
+        border-radius: 32px;
+        color: black;
+        font-weight: bold;
+        transition: 0.7s;
+      }
+      #sportsNav li a {
+        text-decoration: none;
+      }
+      .container {
+        max-width: 550px;
+      }
+      .has-error input {
+        color: red;
+        border-color: red;
+      }
+      .list-unstyled li {
+        font-size: 13px;
+        padding: 4px 0 0;
+        color: red;
+      }
+    </style>
+  </head>
+
+<body>
+  <!-- <nav class="navbar" style="background-color: black; position: sticky">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" style="color: yellow">Sports Scheduler</a>
+      <ul id="sportsNav">
+        <li>Sign out</li>
+      </ul>
+    </div>
+  </nav> -->
+  <section style="width:100%; height:100vh;display: flex; justify-content: center; align-items: center;">
+
+    <div class="container mt-5">
+      <div class="card">
+        <h5 class="card-header text-center">New Sport<h5>
+            <div class="card-body">
+              <form action="/admin_add_sports" method="post">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                <input type="hidden" name="update_sports_name" value="<%= update_sports_name %>" />
+                <input type="hidden" name="update_sports_id" value="<%= update_sports_id %>" />
+                <div class="form-group">
+                  <label>Please enter new sport</label>
+                  <input type="text" class="form-control" name="sports_name" id="inputName"
+                    placeholder="Enter Sports Name">
+                  <!-- Error -->
+                  <div class="help-block with-errors" style="color: red;">
+                    <% if(messages && messages.error && messages.error.length> 0) { %>
+                      <% for(var i=0; i<messages.error.length; i++) { %>
+                        <p class="bg-red-200 my-3 list-none rounded px-4 py-2">
+                          <%= messages.error[i] %>
+                        </p>
+                        <% } %>
+                          <% } %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary btn-block">Create</button>
+                </div>
+                <div class="form-group">
+                  <button type="button" class="btn btn-outline-danger btn-block" onclick="window.location.href='/all_sports'">Back</button>
+                </div>
+              </form>
+            </div>
+      </div>
+    </div>
+  </section>
+</body>
+
+</html>
