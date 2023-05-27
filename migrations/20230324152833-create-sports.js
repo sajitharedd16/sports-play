@@ -2,30 +2,30 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Create_sports', {
+    await queryInterface.createTable('Create-sports', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      sports_name: {
+      sports-name: {
         type: Sequelize.STRING
       },
-      Edit_delete_display: {
+      Edit-delete-display: {
         type: Sequelize.BOOLEAN
       },
-      createdAt: {
+      updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      createdAt: {
         allowNull: false,
         type: Sequelize.DATE
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Create_sports');
+    await queryInterface.dropTable('Create-sports');
   }
 };
