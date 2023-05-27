@@ -2,17 +2,17 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Create-sports', {
+    await queryInterface.createTable('Create_sports', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      sports-name: {
+      sports_name: {
         type: Sequelize.STRING
       },
-      Edit-delete-display: {
+      Edit_delete_display: {
         type: Sequelize.BOOLEAN
       },
       updatedAt: {
@@ -26,6 +26,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Create-sports');
+    await queryInterface.dropTable('Create_sports');
   }
 };
