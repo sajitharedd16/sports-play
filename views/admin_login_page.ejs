@@ -35,7 +35,7 @@
     #xmarks {
       border-radius: 50%;
       font-size: 22px;
-      background-color: #000000;
+      background-color:#FFA07A;
       font-weight: 500;
       color: orange;
       cursor: pointer;
@@ -89,7 +89,7 @@
                     <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_ky03n5aXvs.json"
                       background="transparent" speed="1" style="width: 100px; height: 100px" loop
                       autoplay></lottie-player>
-                    <h4 class="mt-1 mb-5 pb-1">Sports Scheduler</h4>
+                    <h4 class="mt-1 mb-5 pb-1">Sports Play</h4>
                   </div>
                   <h6 style="color: red;">
                     <% if(messages && messages.error && messages.error.length> 0) { %>
@@ -102,17 +102,17 @@
                   </h6>
                   <form action="/admins" method="post">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <p>Please Login with your admin credentials</p>
+                    <p>Login with your admin details</p>
                     <div class="form-outline mb-4">
-                      <input type="text" name="name" id="form2Example11" class="form-control" placeholder="Enter Name"
+                      <input type="text" name="name" id="form2Example11" class="form-control" placeholder="Enter Your Name"
                         style="border: 1px solid;" />
-                      <label class="form-label" for="form2Example11">Name*</label>
+                      <label class="form-label" for="form2Example11">USER</label>
                     </div>
 
                     <div class="form-outline mb-4">
                       <input type="password" name="password" id="form2Example22" class="form-control"
-                        placeholder="Use Admin password!" style="border: 1px solid;" />
-                      <label class="form-label" for="form2Example22">Password*</label>
+                        placeholder="Use Only Admin password!!" style="border: 1px solid;" />
+                      <label class="form-label" for="form2Example22">PASSWORD</label>
                     </div>
 
                     <div class="text-center pt-1 mb-5 pb-1">
