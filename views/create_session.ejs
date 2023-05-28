@@ -10,8 +10,8 @@
         body {
             width: 100%;
             height: 100vh;
-            background: linear-gradient(rgba(0, 0, 0, .3), rgba(0, 0, 0, 1)), url('./bg1.jpg');
             background-size: cover;
+            background: #8B008B;
             background-position: center;
         }
         .container {
@@ -24,8 +24,8 @@
             border-color: red;
         }
         .list-unstyled li {
-            font-size: 13px;
-            padding: 4px 0 0;
+            font-size: 14px;
+            padding: 3px 0 0;
             color: red;
         }
     </style>
@@ -48,7 +48,7 @@
                                     <% } %>
                     </h3>
                     <div class="form-group">
-                        <label>Where will this session be played</label>
+                        <label>Where this session be played</label>
                         <input type="text" name="match_desc" class="form-control" placeholder="Enter Address">
                         <!-- Error -->
                         <div class="help-block with-errors"></div>
@@ -60,17 +60,17 @@
                         <div class="help-block with-errors"></div>
                     </div>
                     <div class="form-group">
-                        <label>Which time the session should be start? (hh:mm AM/PM)</label>
+                        <label>Which time the session should start? (hh:mm AM/PM)</label>
                         <input type="text" pattern="([0-2]{1}[0-9]{1}:[0-6]{1}[0-9] ([A]{1}[M]{1}|[P]{1}|[M]{1}))" name="match_time" class="form-control" placeholder="Enter time for above format" required>
                         <!-- Error -->
                         <div class="help-block with-errors"></div>
                     </div>
 
                     <div class="form-group">
-                        <label>How many more players do you need?</label>
+                        <label>How many number of more players do you need?</label>
                         <div class="form-group">
                             <input type="number" data-minlength="4" class="form-control" min="1" max="30"
-                                name="no_player" placeholder="How many players?" />
+                                name="no_player" placeholder="How many no.of players?" />
                             <!-- Error -->
                             <div class="help-block with-errors"></div>
                         </div>
