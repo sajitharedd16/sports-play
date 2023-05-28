@@ -13,7 +13,7 @@
         </span>
   </p>
   <p class="h4 text-white-50 mx-5">
-    This session scheduled for <%= data.session_date %><span style="font-size: 17px; font-weight: 900;">@</span>
+    This session is scheduled for <%= data.session_date %><span style="font-size: 17px; font-weight: 900;">@</span>
       <%= data.time %>
   </p>
   <p class="h5 text-white-50 mx-5">
@@ -56,10 +56,11 @@
                   <div style="
           width: 80%;
           display: flex;
-          justify-content: center;
           align-items: center;
+          justify-content: center;
+          margin-left: 130px;
           text-align: center;
-          margin-left: 140px;
+          
         " class="alert alert-danger text-center fw-bold h5" role="alert">
                     Can't add players to this session, because this session was ended!
                   </div>
@@ -67,7 +68,7 @@
                     <%}%>
                       <%}%>
                       <%if(players.length==0){%>
-                        <h1 style="color: red;font-family: 'Times New Roman', Times, serif; font-weight: bold;">No Players has been added ,yet!</h1>
+                        <h1 style="color: red;font-family: 'Times New Roman', Times, serif; font-weight: bold;">No Players are added,yet!</h1>
                       <%}%>
                         <div class="mb-5">
                           <div class="grid">
@@ -105,12 +106,13 @@
                             <%}else{ %>
                               <% if(data.session_date < new Date().toISOString().slice(0,10)) {%>
                                 <div style="
-          width: 80%;
+          width: 90%;
           display: flex;
-          justify-content: center;
           align-items: center;
+          justify-content: center;
+          margin-left: 150px;
           text-align: center;
-          margin-left: 140px;
+          
         " class="alert alert-danger text-center fw-bold h5" role="alert">
                                   Session Ended!
                                 </div>
@@ -123,12 +125,13 @@
                                             <%}%>
                                               <% if(count==1){%>
                                                 <div style="
-          width: 80%;
+          width: 90%;
           display: flex;
           justify-content: center;
+          margin-left: 150px;
           align-items: center;
           text-align: center;
-          margin-left: 140px;
+          
         " class="alert alert-success text-center fw-bold h5" role="alert">
                                                   You've joined this session!
                                                 </div>
@@ -152,12 +155,13 @@
                                                     </form>
                                                     <%}else{%>
                                                       <div style="
-          width: 80%;
+          width: 90%;
           display: flex;
           justify-content: center;
           align-items: center;
+          margin-left: 150px;
           text-align: center;
-          margin-left: 140px;
+          
         " class="alert alert-danger text-center fw-bold h5" role="alert">
                                                         <strong>Full!</strong> &#10240;This session was no more
                                                         accepting players.
