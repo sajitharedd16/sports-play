@@ -19,22 +19,22 @@
     ></script>
     <style>
       section {
-        width: 100%;
         height: 100%;
-        display: flex;
+        width: 100%;
         flex-direction: column;
-        justify-content: center;
+        display: flex;
         align-items: center;
+        justify-content: center;
       }
       .card {
-        width: 70%;
         height: 20vh;
-        background: rgb(183, 250, 178);
+        width: 70%;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        border-radius: 32px;
+        background: rgb(183, 250, 178);
         display: flex;
-        flex-direction: row;
+        border-radius: 32px;
         margin-bottom: 50px;
+        flex-direction: row;
       }
       .card:hover {
         box-shadow: 0px 8px 8px rgb(255, 255, 255);
@@ -42,62 +42,62 @@
       }
       #btnOne {
         position: absolute;
-        font-size: 1vw;
         left: 75%;
         top: 40%;
+        font-size: 1vw;
         width: 10%;
       }
       #btnTwo {
         position: absolute;
-        width: 10%;
         font-size: 1vw;
+        width: 10%;
         left: 86%;
         top: 40%;
       }
       .cardContainer {
         display: flex;
-        width: 40%;
         cursor: pointer;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         height: 20vh;
         background: #f5f5f5;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        border-radius: 32px 105.5px 0px 32px;
+        width: 40%;
         align-items: center;
+        border-radius: 32px 105.5px 0px 32px;
         justify-content: center;
       }
       .cardContainer p {
-        font-family: sans-serif;
+        font-family: fantasy;
+        font-size: 3vw;
         font-style: normal;
-        font-weight: 600;
-        font-size: 2vw;
-        line-height: 53px;
-        color: #745a5a;
         text-align: center !important;
+        font-weight: 600;
+        line-height: 55px;
+        color: #745a5a;  
       }
       .list-group-item:hover {
-        background-color: gray;
+        background-color: yellow;
       }
       .card button {
         width: 9%;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 32px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
       }
       #createSportBtn {
         background: rgba(79, 150, 234, 1);
         box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-        border-radius: 32px;
-        font-weight: bold;
+        border-radius: 33px;
         color: white;
-        width: 15%;
+        font-weight: bold;
         height: 8vh;
-        font-size: 1.4vw;
+        width: 15%;
         border: none;
-      }
-      #cardForDd {
-        display: none;
+        font-size: 1.3vw;
       }
       #getDdItem {
         cursor: pointer;
+      }
+      #cardForDd {
+        display: none;
       }
       #createSportBtn:hover {
         background-color: rgb(0, 114, 253);
@@ -143,23 +143,6 @@
           window.location.href = "/login";
         }
       }
-      //   const update_sports_name=(id,name)=>{
-      //     fetch(`/update_sports/:${id}/:${name}`,{
-      //         method:"get",
-      //         headers:{"content-Type":"application/json"},
-      //         body:JSON.stringify({
-      //             _csrf:token,
-      //         })
-      //     }).then((res)=>{
-      //         if(res.ok){
-      //             window.location.reload();
-      //         }
-      //     })
-      //     .catch((err)=>console.log(err));
-      //   }
-      //   const store_sports_name_id=(id,sports_name)=>{
-      //     window.location.replace('/store/:id/:sports_name');
-      //   }
     </script>
   </head>
 
