@@ -27,15 +27,15 @@ module.exports = {
       time: {
         type: Sequelize.STRING
       },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      add-player:{
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      add_player:{
         allowNull:true,
         type: Sequelize.INTEGER
       }
