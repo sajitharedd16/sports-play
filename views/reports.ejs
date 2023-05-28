@@ -8,32 +8,32 @@
     <title>Document</title>
     <style>
         .session_contain{
-            width: 90%;
-            max-height: 460px;
-            flex: 30.33%;
-            overflow-y: scroll;
-            border: 2px solid black;
+            width: 80%;
+            max-height: 470px;
             background: rosybrown;
-            align-items: center;
+            overflow-y: scroll;
+            border: 3px solid black;
             text-align: center;
+            align-items: center;
+            flex: 30.33%;
             overflow-wrap: break-word;
         }
         .one_session{
             width: 29%;
+            padding: 12px;
             height: 30px;
-            padding: 10px;
             border: 2px solid black;
-            padding-top: 5px;
             border-radius: 4px;
-            overflow-wrap: break-word;
+            padding-top: 5px;
             margin-right: -10px;
+            overflow-wrap: break-word;
             display: flex;
         }
         .one_session p{
             font-weight: 800;
-            font-size: 20px;
+            font-size: 22px;
             
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: fantasy;
             margin-top: -3px;
         }
         .need_players{
@@ -105,7 +105,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sports Scheduler</title>
+  <title>Sports play</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous" />
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
@@ -115,25 +115,25 @@
     section {
       width: 100%;
       height: 100%;
-      display: flex;
-      flex-direction: column;
       justify-content: center;
+      flex-direction: column;
+      display: flex;
       align-items: center;
     }
     .card {
       width: 70%;
       height: 20vh;
       background: rgba(219, 235, 218, 1);
-      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-      border-radius: 32px;
       display: flex;
-      flex-direction: row;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      border-radius: 34px;
       margin-bottom: 50px;
+      flex-direction: row;
     }
     .card:hover {
       box-shadow: 0px 8px 8px rgb(255, 255, 255);
       cursor: pointer;
-      transition: 0.4;
+      transition: 0.5;
     }
     #btnOne {
       position: absolute;
@@ -149,35 +149,35 @@
       display: flex;
       width: 40%;
       height: 20vh;
+      border-radius: 32px 105.5px 0px 32px;
       background: #f5f5f5;
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-      border-radius: 32px 105.5px 0px 32px;
-      align-items: center;
       justify-content: center;
+      align-items: center;
     }
     .cardContainer p {
       font-family: sans-serif;
       font-style: normal;
-      font-weight: 600;
-      font-size: 33px;
+      font-weight: 500;
+      font-size: 34px;
       line-height: 53px;
       color: #745a5a;
       text-align: center !important;
     }
     .card button {
       width: 9%;
-      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
       border-radius: 32px;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     }
     #createSportBtn {
       background: rgba(79, 150, 234, 1);
       box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-      border-radius: 32px;
-      font-weight: bold;
+      border-radius: 34px;
       color: white;
+      font-weight: bold;
+      font-size: 24px;
       width: 15%;
       height: 8vh;
-      font-size: 22px;
       border: none;
     }
     #createSportBtn:hover {
@@ -189,25 +189,25 @@
     .grid {
       display: grid;
       grid-template-columns: 33% 33% 33%;
+      padding-right: 3px;
       width: 100%;
-      height: 100%;
-      margin: 2px;
-      padding-right: 2px;
       justify-content: center;
+      height: 100%;
+      margin: 3px;
     }
     .one {
       display: flex;
       flex-direction: row;
       width: 94%;
+      margin: 12px;
       background-color: rgb(183, 250, 178);
       height: 10vh;
-      margin: 10px;
-      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
       border-radius: 9px;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     }
     .cardOne {
-      width: 70%;
-      height: 10vh;
+      width: 75%;
+      height: 11vh;
       background-color: #f5f5f5;
       border-radius: 8px 105px 0px 8px;
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -218,15 +218,15 @@
     }
     #sportsNav li {
       list-style: none;
-      padding: 7px;
-      margin-left: 18px;
+      padding: 8px;
+      margin-left: 16px;
       cursor: pointer;
     }
     #sportsNav li:hover {
       background-color: white;
       border-radius: 32px;
-      color: black;
       font-weight: bold;
+      color: black;
       transition: 0.7s;
     }
     #sportsNav li a {
@@ -240,7 +240,7 @@
   <div>
     <nav class="navbar" style="background-color: black; position: sticky">
       <div class="container-fluid">
-        <a href="/" class="navbar-brand fw-bold" style="color: yellow">Sports Scheduler</a>
+        <a href="/" class="navbar-brand fw-bold" style="color: yellow">Sports play</a>
         <ul id="sportsNav">
           <li onclick="window.location.href='/'">Sign out</li>
         </ul>
@@ -259,10 +259,10 @@
             <div class="cardOne h4 fw-bold" style="
               display: flex;
               cursor: pointer;
+              align-items: center;
               text-align: center;
               align-items: center;
               justify-content: center;
-              align-items: center;
               flex-direction: row;
             ">
               <% if(today[i].add_player==today[i].total_players-1){ %>
@@ -274,8 +274,8 @@
             <p style="
                   font-size: 1.6vw;
                   font-weight: bold;
-                  margin-top: 12px;
-                  margin-left: 25px;
+                  margin-top: 13px;
+                  margin-left: 26px;
                   color: red;
                 ">
               Last Slot
@@ -289,8 +289,8 @@
           <p style="
                   font-size: 1.6vw;
                   font-weight: bold;
-                  margin-top: 12px;
-                  margin-left: 25px;
+                  margin-top: 14px;
+                  margin-left: 26px;
                   color: red;
                 ">
             Full Slot
@@ -355,8 +355,8 @@
         <p style="
                   font-size: 1.6vw;
                   font-weight: bold;
-                  margin-top: 12px;
-                  margin-left: 25px;
+                  margin-top: 14px;
+                  margin-left: 26px;
                   color: red;
                 ">
           Full Slot
@@ -370,8 +370,8 @@
     <p style="
               font-size: 1.6vw;
               font-weight: bold;
-              margin-top: 12px;
-              margin-left: 25px;
+              margin-top: 14px;
+              margin-left: 26px;
             ">
       <%= late[i].total_players - late[i].add_player %> Slot
     </p>
@@ -392,10 +392,10 @@
               display: flex;
         
               cursor: pointer;
+              align-items: center;
               text-align: center;
               align-items: center;
               justify-content: center;
-              align-items: center;
               flex-direction: row;
             ">
                 <% if(post[i].add_player==post[i].total_players-1){ %>
@@ -407,8 +407,8 @@
               <p style="
                   font-size: 1.6vw;
                   font-weight: bold;
-                  margin-top: 12px;
-                  margin-left: 25px;
+                  margin-top: 14px;
+                  margin-left: 26px;
                   color: red;
                 ">
                 Last Slot
@@ -437,8 +437,8 @@
         <p style="
               font-size: 1.6vw;
               font-weight: bold;
-              margin-top: 12px;
-              margin-left: 25px;
+              margin-top: 14px;
+              margin-left: 26px;
             ">
           <%= post[i].total_players - post[i].add_player %> Slot
         </p>
