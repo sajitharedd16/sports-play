@@ -1,9 +1,7 @@
-//const { LocalStorage } = require("node-localstorage");
 const localStorage = require("node-sessionstorage");
-//var localStorage = new LocalStorage("./scratch");
 const express = require("express"); //importing express
 var csrf = require("tiny-csrf");
-const app = express(); // creating new application
+const app = express(); 
 const bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
 app.use(bodyParser.json());
@@ -65,7 +63,7 @@ passport.use(
         })
         .catch(() => {
           return done(null, false, {
-            message: "Account doesn't exist for this mail",
+            message: "Account doesn't exist for this Email",
           });
         });
     }
@@ -94,17 +92,17 @@ app.get("/", async (request, response) => {
   if (localStorage.getItem("admin_name")) {
     localStorage.removeItem("admin_name");
     response.render("webfirst_page", {
-      title: "Sports manage!",
+      title: "Sports manage!!",
     });
   } else {
     response.render("webfirst_page", {
-      title: "Sports manage!",
+      title: "Sports manage!!",
     });
   }
 });
 app.get("/admin_login", async (request, response) => {
   response.render("admin_login_page", {
-    title: "welcom admin",
+    title: "welcome admin",
     csrfToken: request.csrfToken(),
   });
 });
