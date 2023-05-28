@@ -278,7 +278,7 @@ app.post("/admins", async (request, response) => {
     return response.redirect("/admin_login");
   }
   if (request.body.password != "26@#admin") {
-    request.flash("error", "Only use admin password!");
+    request.flash("error", "use only admin password!!");
     return response.redirect("/admin_login");
   } else {
     localStorage.setItem("admin_name", request.body.name);
