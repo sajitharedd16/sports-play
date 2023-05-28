@@ -44,7 +44,7 @@ describe("Todo Application", function () {
       lastName: "sajitha",
       email: "sajithareddyaaleti16@gmail.com",
       password: "12345678",
-      "_csrf": csrfToken, //prettier-ignore
+      "_csrf": csrfToken, 
     });
     expect(res.statusCode).toBe(302);
   });
