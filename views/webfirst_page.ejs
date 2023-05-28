@@ -31,14 +31,12 @@
         align-items: center;
       }
       #admin {
-        background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 1)),
-          url("./bg1.jpg");
+        background:#D8D8D8 ;
         background-size: cover;
         background-repeat: no-repeat;
       }
       #players {
-        background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 1)),
-          url("./bg2.webp");
+        background:	#D8D8D8 ;
         background-size: cover;
         background-position: center;
       }
@@ -62,15 +60,15 @@
       #userBtn {
         width: 15%;
         height: 10%;
-        font-size: 23px;
         border: none;
+        font-size: 23px;
         border-radius: 8px;
-        background-color: rgb(0, 132, 255);
+        background-color: #00FFFF;
+        box-shadow: 1px 1px 10px 0px rgb(191, 185, 185);
         color: white;
+        letter-spacing: 1px;
         font-weight: bold;
         word-spacing: 2px;
-        letter-spacing: 1px;
-        box-shadow: 1px 1px 10px 0px rgb(191, 185, 185);
       }
       #userBtn:hover {
         background-color: gray !important;
@@ -112,21 +110,19 @@
     </nav>
 
     <section id="players">
-      <p class="h2 text-white fw-bold">As a Player,</p>
+      <p class="h2 text-white fw-bold">Participant</p>
       <br />
       <p
         class="h4 w-75 fw-bolds"
         style="
-          text-align: justify;
-          color: rgb(200, 200, 200);
+          text-align:center;
+          color:#9FE2BF;
           word-spacing: 2px;
         "
       >
-        You can join a session that has been created by other players or the
-        administrator. You can also create a new session and invite other
-        players to join it. However, you are only allowed to modify or delete
-        the sessions that you have created. Once a session has ended, you will
-        not be able to join it
+        Here You can join session which has been created by other players.
+        Here you are only allowed to delete the sessions that you have created.
+        Once a session has ended, you will not be able to join it again!
       </p>
       <br /><button
         id="userBtn"
@@ -137,21 +133,21 @@
       </button>
     </section>
     <section id="admin">
-      <p class="h2 text-white fw-bold">As a Administrator,</p>
+      <p class="h2 text-white fw-bold">Administrator</p>
       <br />
       <p
         class="h4 w-75 fw-bolds"
         style="
-          text-align: justify;
-          color: rgb(200, 200, 200);
+          text-align: center;
+          color: #9FE2BF;
           word-spacing: 2px;
         "
       >
-        You are able to create sports and sessions. Additionally, you have the
-        ability to update and delete both sports and sessions. You also have the
+        Here, You can create sports and sessions. you have the
+        chance to update and delete both sports and sessions. You also have the
         authority to delete sessions of other players and add players to any
         session. However, you cannot add players to finished sessions.
-        Furthermore, you have the capability to view reports for each session.
+        you have the capability to view reports for each session.
       </p>
       <br /><button id="adminBtn" onclick="window.location.href='/admin_login'">
         Create Sports
