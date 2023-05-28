@@ -15,11 +15,11 @@ module.exports = {
       Edit_delete_display: {
         type: Sequelize.BOOLEAN
       },
-      updatedAt: {
+      createdAt: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      createdAt: {
+      updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
       }
