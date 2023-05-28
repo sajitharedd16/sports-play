@@ -7,7 +7,7 @@
   <meta name="csrf-token" content="<%= csrfToken %>" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="./css/styles.css" rel="stylesheet" />
-  <title>Sports Scheduler</title>
+  <title>Sports play</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous" />
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
@@ -17,25 +17,25 @@
     section {
       width: 100%;
       height: 100%;
-      display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
+      display: flex;
+      flex-direction: column;
     }
     .card {
       width: 70%;
       height: 20vh;
-      background: rgba(219, 235, 218, 1);
-      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
       border-radius: 32px;
       display: flex;
-      flex-direction: row;
+      background: rgba(219, 235, 218, 1);
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
       margin-bottom: 50px;
+      flex-direction: row;
     }
     .card:hover {
       box-shadow: 0px 8px 8px rgb(255, 255, 255);
-      cursor: pointer;
       transition: 0.4;
+      cursor: pointer;
     }
     #btnOne {
       position: absolute;
@@ -50,19 +50,19 @@
     .cardContainer {
       display: flex;
       width: 40%;
-      height: 20vh;
-      background: #f5f5f5;
+      height: 22vh;
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-      border-radius: 32px 105.5px 0px 32px;
+      background: #f5f5f5;
       align-items: center;
+      border-radius: 30px 105.5px 0px 32px;
       justify-content: center;
     }
     .cardContainer p {
       font-family: sans-serif;
       font-style: normal;
+      line-height: 52px;
       font-weight: 600;
       font-size: 33px;
-      line-height: 53px;
       color: #745a5a;
       text-align: center !important;
     }
@@ -75,12 +75,12 @@
       background: rgba(79, 150, 234, 1);
       box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
       border-radius: 32px;
-      font-weight: bold;
-      color: white;
       width: 15%;
+      color: white;
+      border: none;
       height: 8vh;
       font-size: 22px;
-      border: none;
+      font-weight: bold;
     }
     #createSportBtns {
       background: rgb(223, 43, 43);
@@ -137,10 +137,10 @@
     }
     #sportsNav li:hover {
       background-color: white;
-      border-radius: 32px;
       color: black;
-      font-weight: bold;
+      border-radius: 32px;
       transition: 0.7s;
+      font-weight: bold;
     }
     #sportsNav li a {
       text-decoration: none;
@@ -170,7 +170,7 @@
   <div>
     <nav class="navbar" style="background-color: black; position: sticky">
       <div class="container-fluid">
-        <a href="/" class="navbar-brand fw-bold" style="color: yellow">Sports Scheduler</a>
+        <a href="/" class="navbar-brand fw-bold" style="color: yellow">Sports play</a>
         <ul id="sportsNav">
           <% if(check_admin_are_not){ %>
             <li onclick="window.location.href='<%= url %>'">Reports</li>
@@ -181,5 +181,4 @@
     </nav>
     <%- include("show_all_session.ejs",{data:all_sessions,sports_name:title,post_dada:post_session}) %>
 </body>
-
 </html>
