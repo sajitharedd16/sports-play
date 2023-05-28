@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sports Scheduler</title>
+  <title>Sports play</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous" />
@@ -16,15 +15,12 @@
   <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
   <style>
     .gradient-custom-2 {
-      /* fallback for old browsers */
       background: #fccb90;
-      /* Chrome 10-25, Safari 5.1-6 */
       background: -webkit-linear-gradient(to right,
           #000000,
           #444141,
           #665159,
           #76556c);
-      /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
       background: linear-gradient(to right,
           #242323,
           #444141,
@@ -32,18 +28,18 @@
           #9c8394);
     }
     #close_from {
+      height: 100%;
       margin-right: 2%;
       margin-top: 2%;
-      height: 100%;
     }
     #xmarks {
       border-radius: 50%;
-      font-size: 20px;
+      font-size: 22px;
       background-color: #000000;
-      color: red;
       font-weight: 500;
-      padding: 5px;
+      color: orange;
       cursor: pointer;
+      padding: 6px;
     }
     #xmarks:hover {
       color: rgb(248, 92, 92);
@@ -130,16 +126,8 @@
               <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
                 <div class="text-white px-3 py-4 p-md-5 mx-md-4">
                   <h4 class="mb-4">
-                    Push yourself beyond your limits, achieve greatness
-                    through sports.
+                    "Excellence is not a singular act but a habit. You are what you do repeatedly."
                   </h4>
-                  <p class="small mb-0">
-                    Playing sports provides countless physical benefits, from
-                    improving cardiovascular health to building muscle and
-                    bone density. Participating in sports helps improve your
-                    endurance and builds your stamina, allowing you to push
-                    yourself harder and go farther.
-                  </p>
                 </div>
                 <div id="close_from">
                   <i class="fa fa-close" id="xmarks" onclick="window.location.href='/#admin'"></i>
