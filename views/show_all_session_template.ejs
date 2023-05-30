@@ -1,6 +1,6 @@
 <section>
   <p class="h1 text-white fw-bold mt-5 mx-5 shadow-sm">
-    <%= data.sports_title %> #<%= data.id %><span style="float: right" class="h5">Created By <%
+    <%= data.sports_title %> #<%= data.id %><span style="float: right" class="h5">Originated By <%
             if(data.uploader_id=='admin' && admin){%>
             You!
             <%}else if(data.uploader_id=='admin' ){%>
@@ -13,7 +13,7 @@
         </span>
   </p>
   <p class="h4 text-white-50 mx-5">
-    This session scheduled for <%= data.session_date %><span style="font-size: 17px; font-weight: 900;">@</span>
+    This session is programmed for <%= data.session_date %><span style="font-size: 17px; font-weight: 900;">@</span>
       <%= data.time %>
   </p>
   <p class="h5 text-white-50 mx-5">
@@ -67,7 +67,7 @@
                     <%}%>
                       <%}%>
                       <%if(players.length==0){%>
-                        <h1 style="color: red;font-family: 'Times New Roman', Times, serif; font-weight: bold;">No Players has been added ,yet!</h1>
+                        <h1 style="color: red;font-family: fantasy; font-weight: bold;">No Players has been added ,yet!</h1>
                       <%}%>
                         <div class="mb-5">
                           <div class="grid">
@@ -112,7 +112,7 @@
           text-align: center;
           margin-left: 140px;
         " class="alert alert-danger text-center fw-bold h5" role="alert">
-                                  Session Ended!
+                                  Session has been Ended!
                                 </div>
                                 <%}else{%>
                                   <% var count=0; %>
@@ -130,7 +130,7 @@
           text-align: center;
           margin-left: 140px;
         " class="alert alert-success text-center fw-bold h5" role="alert">
-                                                  You've joined this session!
+                                                  You have joined this session!
                                                 </div>
                                                 <%}else{%>
                                                   <% if((data.add_player-data.total_players)!=0){%>
