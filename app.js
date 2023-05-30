@@ -456,7 +456,7 @@ app.post("/users", async (request, response) => {
     return response.redirect("/signup");
   }
   if (request.body.password.length < 8) {
-    request.flash("error", "Password length should be minimun 8");
+    request.flash("error", "Password length should be atleast 8");
     return response.redirect("/signup");
   }
   if (alerady_use_mail) {
@@ -597,7 +597,7 @@ app.get("/resetpassword", async (request, response) => {
 });
 app.post("/reset", connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
   if (req.body.newPassword.length < 8) {
-    req.flash("error", "Password length should be atleast 8");
+    req.flash("error", "Password length should be minimum 8");
     return res.redirect("/resetpassword");
   }
   const hashedNewPwd = await bcrypt.hash(req.body.newPassword, saltRounds);
