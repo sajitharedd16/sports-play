@@ -14,15 +14,24 @@
     integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
     crossorigin="anonymous"></script>
   <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
     .gradient-custom-2 {
       background: Plum;
       background: Plum;
     }
-    @media (min-width: 768px) {
-      .gradient-form {
-        height: 100vh !important;
-      }
+
+    .gradient-form {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: Plum;
     }
+
     @media (min-width: 769px) {
       .gradient-custom-2 {
         border-top-right-radius: 0.3rem;
@@ -51,48 +60,44 @@
 </head>
 
 <body>
-  <section class="h-100 gradient-form" style="background: Plum;">
-    <div class="container py-5 h-100">
-      <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col-xl-10">
+  <section class="gradient-form">
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-6">
           <div class="card rounded-3 text-black">
-            <div class="row g-0">
-              <div class="col-lg-6" style="background-color: whitesmoke">
-                <div class="card-body p-md-5 mx-md-4">
-                  <div class="text-center">
-                    <h4 class="mt-1 mb-5 pb-1">Sports Play</h4>
-                  </div>
-                  <h6 style="color: red;">
-                    <% if(messages && messages.error && messages.error.length> 0) { %>
-                      <% for(var i=0; i<messages.error.length; i++) { %>
-                        <p class="bg-red-200 my-3 list-none rounded px-4 py-2">
-                          <%= messages.error[i] %>
-                        </p>
-                        <% } %>
-                          <% } %>
-                  </h6>
-                  <form action="/admins" method="post">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <div class="form-outline mb-4">
-                      <input type="text" name="name" id="form2Example11" class="form-control" placeholder="Enter your Name"
-                        style="border: 1px solid;" />
-                      <label class="form-label" for="form2Example11">NAME</label>
-                    </div>
-
-                    <div class="form-outline mb-4">
-                      <input type="password" name="password" id="form2Example22" class="form-control"
-                        placeholder="Use Admin password!" style="border: 1px solid;" />
-                      <label class="form-label" for="form2Example22">PASSWORD</label>
-                    </div>
-
-                    <div class="text-center pt-1 mb-5 pb-1">
-                      <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3 w-100" type="submit">
-                        Login
-                      </button>
-                    </div>
-                  </form>
-                </div>
+            <div class="card-body p-md-5 mx-md-4">
+              <div class="text-center">
+                <h4 class="mt-1 mb-5 pb-1">Sports Play</h4>
               </div>
+              <h6 style="color: red;">
+                <% if(messages && messages.error && messages.error.length> 0) { %>
+                  <% for(var i=0; i<messages.error.length; i++) { %>
+                    <p class="bg-red-200 my-3 list-none rounded px-4 py-2">
+                      <%= messages.error[i] %>
+                    </p>
+                    <% } %>
+                      <% } %>
+              </h6>
+              <form action="/admins" method="post">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <div class="form-outline mb-4">
+                  <input type="text" name="name" id="form2Example11" class="form-control" placeholder="Enter your Name"
+                    style="border: 1px solid;" />
+                  <label class="form-label" for="form2Example11">NAME</label>
+                </div>
+
+                <div class="form-outline mb-4">
+                  <input type="password" name="password" id="form2Example22" class="form-control"
+                    placeholder="Use Admin password!" style="border: 1px solid;" />
+                  <label class="form-label" for="form2Example22">PASSWORD</label>
+                </div>
+
+                <div class="text-center pt-1 mb-5 pb-1">
+                  <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3 w-100" type="submit">
+                    Login
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
