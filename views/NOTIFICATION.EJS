@@ -1,0 +1,56 @@
+<div id="notify" class="notify">
+    <div class="error">
+        <% if(messages && messages.error && messages.error.length > 0)  { %>
+            <% for(var i = 0; i < messages.error.length; i++) { %>
+                <p> <%= messages.error[i] %><span id="close" class="close">X</span></p>
+            <% } %>
+            <script>
+                const closeEl = document.getElementById("close")
+                const notifyEl = document.getElementById("notify")
+                if (window.location.href.includes("login") || window.location.href.includes("signup")) {
+                    closeEl.innerHTML = ""
+                } else {
+                    closeEl.addEventListener("click", () => {
+                        notifyEl.innerHTML = ""
+                    })
+                }
+            </script>
+        <% } %>
+    </div>
+    <div class="success">
+        <% if(messages && messages.success && messages.success.length > 0)  { %>
+            <% for(var i = 0; i < messages.success.length; i++) { %>
+                <p> <%= messages.success[i] %><span id="close" class="close">X</span></p>
+            <% } %>
+            <script>
+                const closeEl = document.getElementById("close")
+                const notifyEl = document.getElementById("notify")
+                if (window.location.href.includes("login") || window.location.href.includes("signup")) {
+                    closeEl.innerHTML = ""
+                } else {
+                    closeEl.addEventListener("click", () => {
+                        notifyEl.innerHTML = ""
+                    })
+                }
+            </script>
+        <% } %>
+    </div>
+    <div class="info">
+        <% if(messages && messages.info && messages.info.length > 0)  { %>
+            <% for(var i = 0; i < messages.info.length; i++) { %>
+                <p> <%= messages.info[i] %> <span id="close" class="close">X</span></p>
+            <% } %>
+            <script>
+                const closeEl = document.getElementById("close")
+                const notifyEl = document.getElementById("notify")
+                if (window.location.href.includes("login") || window.location.href.includes("signup")) {
+                    closeEl.innerHTML = ""
+                } else {
+                    closeEl.addEventListener("click", () => {
+                        notifyEl.innerHTML = ""
+                    })
+                }
+            </script>
+        <% } %>
+    </div>
+</div>
