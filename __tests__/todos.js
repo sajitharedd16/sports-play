@@ -40,9 +40,9 @@ describe("Todo Application", function () {
     let res = await agent.get("/signup");
     const csrfToken = extractCsrfToken(res);
     res = await agent.post("/users").send({
-      firstName: "aaleti",
-      lastName: "sajitha",
-      email: "sajithareddyaaleti16@gmail.com",
+      firstName: "seeni",
+      lastName: "vasan",
+      email: "user123@gmail.com",
       password: "12345678",
       "_csrf": csrfToken, //prettier-ignore
     });
@@ -60,7 +60,7 @@ describe("Todo Application", function () {
 
   test("Creates a new todos", async () => {
     const agent = request.agent(server);
-    await login(agent, "sajithareddyaaleti16@gmail.com", "12345678");
+    await login(agent, "user123@gmail.com", "12345678");
     let res = await agent.get("/todos");
     let csrfToken = extractCsrfToken(res);
     const response = await agent.post("/todos").send({
@@ -74,7 +74,7 @@ describe("Todo Application", function () {
 
   test("Marks as complete with id", async () => {
     const agent = request.agent(server);
-    await login(agent, "sajithareddyaaleti16@gmail.com", "12345678");
+    await login(agent, "user123@gmail.com", "12345678");
     let res = await agent.get("/todos");
     let csrfToken = extractCsrfToken(res);
     await agent.post("/todos").send({
@@ -105,7 +105,7 @@ describe("Todo Application", function () {
   });
   test("Deletes a todo with the given ID", async () => {
     const agent = request.agent(server);
-    await login(agent, "sajithareddyaaleti16@gmail.com", "12345678");
+    await login(agent, "user123@gmail.com", "12345678");
     let res = await agent.get("/todos");
     let csrfToken = extractCsrfToken(res);
     await agent.post("/todos").send({
