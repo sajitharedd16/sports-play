@@ -277,7 +277,7 @@ app.post("/admins", async (request, response) => {
     request.flash("error", "Email can not be empty!");
     return response.redirect("/admin_login");
   }
-  if (request.body.password != "26@#admin") {
+  if (request.body.password != "chinnu@16") {
     request.flash("error", "Only use admin password!");
     return response.redirect("/admin_login");
   } else {
