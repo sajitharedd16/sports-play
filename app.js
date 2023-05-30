@@ -1,56 +1,51 @@
-const express = require("express");
+//const { LocalStorage } = require("node-localstorage");
+const localStorage = require("node-sessionstorage");
+//var localStorage = new LocalStorage("./scratch");
+const express = require("express"); //importing express
+var csrf = require("tiny-csrf");
+const app = express(); // creating new application
 const bodyParser = require("body-parser");
-
-const path = require("path");
-const { User, Sport, Session } = require("./models");
-const {
-  sessionGenerator,
-  capitalizeString,
-  capitalizeName,
-  sportGenerator,
-  sportSessions,
-} = require("./functions");
-
-const bcrypt = require("bcrypt");
-const cookieParser = require("cookie-parser");
-const csurf = require("tiny-csrf");
-const session = require("express-session");
-const flash = require("connect-flash");
-
-const passport = require("passport");
-const LocalStrategy = require("passport-local");
-
-const app = express();
-
-app.set("view engine", "ejs");
-app.set("views", path.resolve(__dirname, "views"));
-app.use(express.static(path.resolve(__dirname, "public")));
-
+var cookieParser = require("cookie-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(cookieParser("cookie-parser-secret"));
-app.use(csurf("bxMNjNqSnWZvWE8f6oxTBykN71PoXmHz"));
-
+const path = require("path");
+const { Model, Op } = require("sequelize");
+const passport = require("passport");
+const connectEnsureLogin = require("connect-ensure-login");
+const session = require("express-session");
+const LocalStrategy = require("passport-local");
+const flash = require("connect-flash");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
+app.set("views", path.join(__dirname, "views"));
+app.use(flash());
+const {
+  User,
+  Create_sports,
+  Create_session,
+  Players_names,
+} = require("./models");
+const { compile } = require("ejs");
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "images")));
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser("shh! some secrete string"));
+app.use(csrf("this_should_be_32_character_long", ["POST", "PUT", "DELETE"]));
+app.set("view engine", "ejs");
 app.use(
   session({
-    saveUninitialized: true,
-    resave: true,
-    secret: "keyboard cat",
+    secret: "my-super-secret-key-21728172615261562",
     cookie: {
-      maxAge: 3600000,
+      maxAge: 24 * 60 * 60 * 1000,
     },
   })
 );
-
-app.use(flash());
-app.use((request, response, next) => {
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(function (request, response, next) {
   response.locals.messages = request.flash();
   next();
 });
-
-app.use(passport.initialize());
-app.use(passport.session());
 
 passport.use(
   new LocalStrategy(
@@ -58,621 +53,570 @@ passport.use(
       usernameField: "email",
       passwordField: "password",
     },
-    (email, password, done) => {
-      User.findOne({
-        where: {
-          email,
-        },
-      })
-        .then(async (user) => {
-          if (!user) {
-            return done(null, false, { message: "User Not Found" });
-          }
+    (username, password, done) => {
+      User.findOne({ where: { email: username } })
+        .then(async function (user) {
           const result = await bcrypt.compare(password, user.password);
           if (result) {
             return done(null, user);
           } else {
-            return done(null, false, { message: "Incorrect Password" });
+            return done(null, false, { message: "Invalid password" });
           }
         })
-        .catch((err) => {
-          console.log(err);
-          return done(err);
+        .catch(() => {
+          return done(null, false, {
+            message: "Account doesn't exist for this mail",
+          });
         });
     }
   )
 );
 
 passport.serializeUser((user, done) => {
+  console.log("Serializing user in session", user.id);
   done(null, user.id);
 });
 
-passport.deserializeUser(function (id, done) {
+passport.deserializeUser((id, done) => {
   User.findByPk(id)
     .then((user) => {
       done(null, user);
     })
-    .catch((err) => {
-      done(err, null, { message: "Error occurred, please try again" });
+    .catch((error) => {
+      done(error, null);
     });
 });
 
-// Used only during auth to identify if a user is already logged in
-const alreadyLoggedIn = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    res.locals.messages = req.flash("info", "You are already logged in");
-    res.redirect("/dashboard");
+app.get("/", async (request, response) => {
+  if (localStorage.getItem("userId")) {
+    localStorage.removeItem("userId");
+  }
+  if (localStorage.getItem("admin_name")) {
+    localStorage.removeItem("admin_name");
+    response.render("webfirst_page", {
+      title: "Sports manage!",
+    });
   } else {
-    return next();
+    response.render("webfirst_page", {
+      title: "Sports manage!",
+    });
   }
-};
-
-// Used to check if a user is logged in, if not redirect to login page
-const isLoggedIn = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect("/login");
-};
-
-// Used to check if a user is an admin, if not redirect to dashboard
-const isAdmin = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    if (req.user.admin) {
-      return next();
-    } else {
-      res.locals.messages = req.flash(
-        "info",
-        "User does not have required authorization"
-      );
-      res.redirect("/dashboard");
-    }
-  } else {
-    res.redirect("/login");
-  }
-};
-
-// Get Home Page
-app.get("/", alreadyLoggedIn, async (req, res) => {
-  res.render("homepage", {
-    csrfToken: req.csrfToken(),
-    title: "Homepage",
+});
+app.get("/admin_login", async (request, response) => {
+  response.render("admin_login_page", {
+    title: "welcom admin",
+    csrfToken: request.csrfToken(),
   });
 });
-
-// Get Sign-Up Page
-app.get("/signup", alreadyLoggedIn, (req, res) => {
-  res.render("signup", {
-    csrfToken: req.csrfToken(),
-    title: "Signup",
+app.get("/all_session/:id/:sports_name", async (request, response) => {
+  //if((localStorage.getItem("admin_name"))||(localStorage.getItem("userId")))
+  const splits_colan = request.params.sports_name.slice(1);
+  const splits_colan_id = request.params.id.slice(1);
+  localStorage.setItem("current_sports_name", splits_colan),
+    localStorage.setItem("current_sports_id", splits_colan_id);
+  const all_sessions = await Create_session.get_today_late_session(
+    splits_colan
+  );
+  const post_session = await Create_session.get_post_session(splits_colan);
+  const url = `/all_session/:${request.params.id.slice(
+    1
+  )}/:${request.params.sports_name.slice(1)}/report`;
+  if (request.accepts("html")) {
+    response.render("all_sports_session", {
+      title: localStorage.getItem("current_sports_name"),
+      check_admin_are_not: localStorage.getItem("admin_name")
+        ? localStorage.getItem("admin_name")
+        : 0,
+      all_sessions,
+      post_session,
+      url,
+      csrfToken: request.csrfToken(),
+    });
+  } else {
+    response.json({ all_sessions });
+  }
+});
+app.get("/all_session/:id/:sports_name/report", async (request, response) => {
+  const splits_colan = request.params.sports_name.slice(1);
+  const splits_colan_id = request.params.id.slice(1);
+  localStorage.setItem("current_sports_name", splits_colan),
+    localStorage.setItem("current_sports_id", splits_colan_id);
+  const today = await Create_session.get_today(splits_colan);
+  const late = await Create_session.get_dulate(splits_colan);
+  const post = await Create_session.get_post_session(splits_colan);
+  if (request.accepts("html")) {
+    response.render("reports", {
+      title: localStorage.getItem("current_sports_name"),
+      today,
+      late,
+      post,
+      csrfToken: request.csrfToken(),
+    });
+  } else {
+    response.json({ all_sessions });
+  }
+});
+app.get("/session_des/:id", async (request, response) => {
+  const session_id = request.params.id.slice(1);
+  const sports_name = localStorage.getItem("current_sports_name");
+  const one_session = await Create_session.get_one_session(
+    sports_name,
+    session_id
+  );
+  const get_players = await Players_names.get_player_name_for_session(
+    sports_name,
+    session_id
+  );
+  if (request.accepts("html")) {
+    response.render("show_all_session_details", {
+      title: localStorage.getItem("current_sports_name"),
+      one_session,
+      single_userid: localStorage.getItem("userId")
+        ? localStorage.getItem("userId")
+        : 0,
+      admin: localStorage.getItem("admin_name")
+        ? localStorage.getItem("admin_name")
+        : 0,
+      sports_id: localStorage.getItem("current_sports_id"),
+      sports_name: localStorage.getItem("current_sports_name"),
+      session_id: request.params.id.slice(1),
+      get_players,
+      csrfToken: request.csrfToken(),
+    });
+  } else {
+    response.json({ one_session, single_userid, admin });
+  }
+});
+app.get("/all_session", async (request, response) => {
+  response.render("all_sports_session", {
+    title: localStorage.getItem("current_sports_name"),
+    csrfToken: request.csrfToken(),
   });
 });
-
-// Post Sign-Up Page
-app.post("/signup", async (req, res) => {
-  const hashedPassword = await bcrypt.hash(req.body.password, 10);
-  const role = req.body.role.toLowerCase() === "admin";
+app.get("/add_sports", async (request, response) => {
+  response.render("add_new_Sports", {
+    Title: "create sports",
+    update_sports_name: false,
+    update_sports_id: null,
+    csrfToken: request.csrfToken(),
+  });
+});
+app.put("/add_sports/:id", async (req, response) => {
+  console.log(response);
+  response.render("add_new_Sports", {
+    update_sports_name: true,
+    update_sports_id: req.params.id,
+    csrfToken: "sdfghjlkujryjmjn,kmjff",
+  });
+});
+app.get("/all_sports", async (request, response) => {
+  const all_sports = await Create_sports.getSports();
+  const check_admin = localStorage.getItem("admin_name")
+    ? localStorage.getItem("admin_name")
+    : 0;
+  if (request.accepts("html")) {
+    response.render("admin_create_sports", {
+      title: localStorage.getItem("admin_name")
+        ? localStorage.getItem("admin_name")
+        : request.user.firstName + request.user.lastName,
+      all_sports,
+      check_admin_are_not: localStorage.getItem("admin_name")
+        ? localStorage.getItem("admin_name")
+        : 0,
+      check_admin,
+      csrfToken: request.csrfToken(),
+    });
+  } else {
+    response.join({ all_sports, check_admin });
+  }
+});
+app.post("/admin_add_sports", async (request, response) => {
+  if (request.body.sports_name == 0) {
+    request.flash("error", "Enter a sports name!");
+    return response.redirect("/add_sports");
+  }
   try {
-    await User.createNewUser(req.body, role, hashedPassword);
-    res.redirect("/login");
+    const new_sports = await Create_sports.create({
+      sports_name: request.body.sports_name.toUpperCase(),
+      Edit_delete_display: false,
+    });
+    response.redirect("/all_sports");
   } catch (error) {
     console.log(error);
-    res.locals.messages = req.flash("error", error.errors[0].message);
-    res.redirect("/signup");
+  }
+});
+app.post("/update_sports", async (request, response) => {
+  if (request.body.sports_name == 0) {
+    request.flash("error", "Enter a sports name!");
+    return response.redirect(
+      `/update_sports/:${localStorage.getItem(
+        "current_sports_id"
+      )}/:${"current_sports_name"}`
+    );
+  }
+  try {
+    await Create_session.update_sports_name(
+      request.body.oldname,
+      request.body.sports_name.toUpperCase()
+    );
+    await Players_names.update_sports_name_players_count(
+      request.body.oldname,
+      request.body.sports_name.toUpperCase()
+    );
+    await Create_sports.edit_sports(
+      request.body.id.slice(1),
+      request.body.sports_name.toUpperCase()
+    );
+    response.redirect("/all_sports");
+  } catch (error) {
+    console.log(error);
+  }
+});
+app.post("/admins", async (request, response) => {
+  if (request.body.name.length == 0) {
+    request.flash("error", "Email can not be empty!");
+    return response.redirect("/admin_login");
+  }
+  if (request.body.password != "26@#admin") {
+    request.flash("error", "Only use admin password!");
+    return response.redirect("/admin_login");
+  } else {
+    localStorage.setItem("admin_name", request.body.name);
+    //localStorage.setItem("admin_email",request.body.email);
+    response.redirect("/all_sports");
+  }
+});
+app.get("/input_session", async (request, response) => {
+  response.render("Create_session", {
+    title: localStorage.getItem("current_sports_name"),
+    sports_id: localStorage.getItem("current_sports_id"),
+    csrfToken: request.csrfToken(),
+  });
+});
+app.post("/create_session", async (request, response) => {
+  if (request.body.match_desc.length === 0) {
+    request.flash("error", "Enter match desc");
+    return response.redirect("/input_session");
+  } else if (request.body.match_date.length === 0) {
+    request.flash("error", "select date");
+    return response.redirect("/input_session");
+  } else if (request.body.no_player.length === 0) {
+    request.flash("error", "enter players");
+    return response.redirect("/input_session");
+  } else if (request.body.match_time.length === 0) {
+    request.flash("error", "enter time");
+    return response.redirect("/input_session");
+  }
+  try {
+    const session_data = await Create_session.create({
+      session_des: request.body.match_desc,
+      session_date: request.body.match_date,
+      uploader_id: localStorage.getItem("admin_name")
+        ? "admin"
+        : request.user.id,
+      sports_title: localStorage.getItem("current_sports_name"),
+      total_players: request.body.no_player,
+      time: request.body.match_time,
+      add_player: 0,
+    });
+    response.redirect(
+      `/all_session/:${localStorage.getItem(
+        "current_sports_id"
+      )}/:${localStorage.getItem("current_sports_name")}`
+    );
+  } catch (err) {
+    console.log(err);
+  }
+});
+app.post("/update_sessionvalues", async (request, response) => {
+  if (request.body.match_desc.length === 0) {
+    request.flash("error", "Enter match desc");
+    return response.redirect(
+      `/update_session/:${request.body.id}/:${request.body.olddes}/:${request.body.olddate}/:${request.body.oldtime}/:${request.body.oldplayers}/:${request.body.existing_player_count}`
+    );
+  } else if (request.body.match_date.length === 0) {
+    request.flash("error", "select date");
+    return response.redirect(
+      `/update_session/:${request.body.id}/:${request.body.olddes}/:${request.body.olddate}/:${request.body.oldtime}/:${request.body.oldplayers}/:${request.body.existing_player_count}`
+    );
+  } else if (
+    request.body.no_player === 0 ||
+    request.body.no_player.length === 0
+  ) {
+    request.flash(
+      "error",
+      `sorry you player ${request.body.existing_player_count} but now you try add ${request.body.no_player}`
+    );
+    return response.redirect(
+      `/update_session/:${request.body.id}/:${request.body.olddes}/:${request.body.olddate}/:${request.body.oldtime}/:${request.body.oldplayers}/:${request.body.existing_player_count}`
+    );
+  } else if (request.body.match_time.length === 0) {
+    request.flash("error", "enter time");
+    return response.redirect(
+      `/update_session/:${request.body.id}/:${request.body.olddes}/:${request.body.olddate}/:${request.body.oldtime}/:${request.body.oldplayers}/:${request.body.existing_player_count}`
+    );
+  }
+  try {
+    await Create_session.update_sessionwith_id(
+      request.body.id,
+      request.body.match_desc,
+      request.body.match_date,
+      request.body.match_time,
+      request.body.no_player
+    );
+    await Players_names.update_player_count(
+      request.body.id,
+      request.body.no_player
+    );
+    response.redirect(
+      `/all_session/:${localStorage.getItem(
+        "current_sports_id"
+      )}/:${localStorage.getItem("current_sports_name")}`
+    );
+  } catch (err) {
+    console.log(err);
+  }
+});
+app.post("/add_players", async (request, response) => {
+  //console.log("userid"+request.user.id);
+  try {
+    const all_players_name = request.body.player_name.toUpperCase();
+    const split_name = all_players_name.split(",");
+    for (var i = 0; i < split_name.length; i++) {
+      const players_data = await Players_names.create({
+        players_name: split_name[i],
+        session_id: request.body.session_id,
+        sports_name: request.body.sports_name,
+        total_player: request.body.total_player,
+        uploader_id: request.body.uploader_id,
+      });
+      await Create_session.update_player_count(
+        request.body.session_id,
+        request.body.sports_name,
+        request.body.total_count_player
+      );
+    }
+
+    //window.location.replace(`/session_des/:${request.body.session_id}`);
+    //response.replace(`/session_des/:${request.body.session_id}`)
+    response.redirect(`/session_des/:${request.body.session_id}`);
+  } catch (err) {
+    console.log(err);
+  }
+});
+app.post("/join_players", async (request, response) => {
+  try {
+    const players = await Players_names.create({
+      players_name:
+        request.user.firstName.toUpperCase() +
+        request.user.lastName.toUpperCase(),
+      session_id: request.body.session_id,
+      sports_name: request.body.sports_name,
+      total_player: request.body.total_player,
+      uploader_id: request.body.uploader_id,
+      my_name: request.user.id,
+    });
+    await Create_session.update_player_count(
+      request.body.session_id,
+      request.body.sports_name,
+      request.body.total_count_player
+    );
+    response.redirect(`/session_des/:${request.body.session_id}`);
+  } catch (err) {
+    console.log(err);
   }
 });
 
-// Get Login Page
-app.get("/login", alreadyLoggedIn, (req, res) => {
-  res.render("login", {
-    csrfToken: req.csrfToken(),
-    title: "Login",
+app.get("/signup", (request, response) => {
+  response.render("signup", {
+    title: "Signup",
+    csrfToken: request.csrfToken(),
   });
 });
+app.post("/users", async (request, response) => {
+  const alerady_use_mail = await User.findOne({
+    where: {
+      email: {
+        [Op.eq]: request.body.email,
+      },
+    },
+  });
 
-// Post Login Page
+  if (request.body.email.length == 0) {
+    request.flash("error", "Email can not be empty!");
+    return response.redirect("/signup");
+  }
+
+  if (request.body.firstName.length == 0) {
+    request.flash("error", "First name can not be empty!");
+    return response.redirect("/signup");
+  }
+  if (request.body.lastName.length == 0) {
+    request.flash("error", "Last name can not be empty!");
+    return response.redirect("/signup");
+  }
+  if (request.body.password.length < 8) {
+    request.flash("error", "Password length should be minimun 8");
+    return response.redirect("/signup");
+  }
+  if (alerady_use_mail) {
+    request.flash("error", "This email is already exists!");
+    return response.redirect("/signup");
+  } else {
+    const hashedPwd = await bcrypt.hash(request.body.password, saltRounds);
+    console.log(hashedPwd);
+
+    try {
+      const user = await User.create({
+        firstName: request.body.firstName,
+        lastName: request.body.lastName,
+        email: request.body.email,
+        password: hashedPwd,
+      });
+      request.login(user, (err) => {
+        if (err) {
+          console.log(err);
+        }
+        response.redirect("/login");
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+});
+
+app.get("/login", (request, response) => {
+  if (localStorage.getItem("userId")) {
+    localStorage.removeItem("userId");
+  }
+  if (localStorage.getItem("admin_name")) {
+    localStorage.removeItem("admin_name");
+  }
+  response.render("login", { title: "Login", csrfToken: request.csrfToken() });
+});
+
 app.post(
-  "/login",
+  "/session",
   passport.authenticate("local", {
-    successRedirect: "/dashboard",
     failureRedirect: "/login",
     failureFlash: true,
-  })
+  }),
+
+  function (request, response) {
+    localStorage.setItem("userId", request.user.id);
+    console.log(request.user);
+    response.redirect("/all_sports");
+  }
 );
-
-// Get Dashboard Page
-app.get("/dashboard", isLoggedIn, async (req, res) => {
-  const user = capitalizeName(req.user);
-  const joinedSessions = await sessionGenerator(
-    await Session.getJoinedSessions(req.user.email)
-  );
-  const createdSessions = await sessionGenerator(
-    await Session.getCreatedSessions(req.user.id)
-  );
-  const canceledSessions = await sessionGenerator(
-    await Session.getCanceledSessions(req.user.email)
-  );
-  const admin = req.user.admin;
-  res.render("dashboard", {
-    csrfToken: req.csrfToken(),
-    title: "Dashboard",
-    createdSessions: createdSessions,
-    joinedSessions: joinedSessions,
-    canceledSessions: canceledSessions,
-    user: user,
-    admin: admin,
-    displayPrompt: false,
-  });
-});
-
-// Get Sports Page
-app.get("/sports", isLoggedIn, async (req, res) => {
-  const sports = await sportGenerator(await Sport.getAllSports());
-  const admin = req.user.admin;
-  res.render("sports", {
-    csrfToken: req.csrfToken(),
-    title: "Sports",
-    sports: sports,
-    admin: admin,
-  });
-});
-
-// Get Create Sport Page
-app.get("/sports/new-sport", isAdmin, (req, res) => {
-  const admin = req.user.admin;
-  res.render("new-sport", {
-    csrfToken: req.csrfToken(),
-    title: "New Sport",
-    admin: admin,
-  });
-});
-
-// Post Create Sport Page
-app.post("/sports/new-sport", isAdmin, async (req, res) => {
-  try {
-    await Sport.createNewSport(req.user.id, capitalizeString(req.body.sport));
-    res.locals.messages = req.flash("success", "Sport successfully created");
-    res.redirect("/sports");
-  } catch (error) {
-    console.log(error);
-    res.locals.messages = req.flash("error", error.errors[0].message);
-    res.redirect("/sports");
-  }
-});
-
-// Get Edit Sport Page
-app.get("/sports/:sport/edit-sport", isAdmin, async (req, res) => {
-  try {
-    await Sport.getSportId(req.params.sport);
-    let admin = req.user.admin;
-    res.render("edit-sport", {
-      csrfToken: req.csrfToken(),
-      title: `Update Sport`,
-      currentSport: req.params.sport,
-      admin: admin,
-    });
-  } catch (error) {
-    console.log(error);
-    res.locals.messages = req.flash("error", `Sport does not exist`);
-    res.redirect("/sports/" + req.params.sport);
-  }
-});
-
-// Post Edit Sport Page
-app.post("/sports/:sport/edit-sport", isAdmin, async (req, res) => {
-  try {
-    const sportId = await Sport.getSportId(req.params.sport);
-    if (req.body.sport === req.params.sport) {
-      res.locals.messages = req.flash("error", `Sport name cannot be the same`);
-      res.redirect("/sports/" + req.params.sport + "/edit-sport");
-      return;
+app.get("/signout", (request, response, next) => {
+  request.logout((err) => {
+    if (err) {
+      return next(err);
     }
-    await Sport.updateSport(sportId, capitalizeString(req.body.sport));
-    res.locals.messages = req.flash("success", "Sport successfully updated");
-    res.redirect("/sports/" + capitalizeString(req.body.sport));
-  } catch (error) {
-    console.log(error);
-    res.locals.messages = req.flash("error", `Sport does not exist`);
-    res.redirect("/sports/" + req.params.sport);
+    response.redirect("/");
+  });
+});
+app.delete("/all_sports/:id/del/:sp_name", async (request, response) => {
+  try {
+    await Create_sports.remove(request.params.id);
+    // const a=await Create_session.findids(request.params.sp_name)
+    // console.log("all sesion"+ a.id[1])
+    await Create_session.remove_all_session(request.params.sp_name);
+
+    return response.json(true);
+  } catch (err) {
+    return response.status(422).json(err);
   }
 });
+app.delete(
+  "/session_des/:id/:del",
 
-// Get Sessions Page
-app.get("/sports/:sport", isLoggedIn, async (req, res) => {
-  try {
-    const sportId = await Sport.getSportId(req.params.sport);
-    const oldSessions = await sessionGenerator(
-      await Session.getOlderSessions(sportId),
-      true,
-      true,
-      req.user.id
-    );
-    const newSessions = await sessionGenerator(
-      await Session.getNewerSessions(sportId),
-      true,
-      true,
-      req.user.id
-    );
-    const admin = req.user.admin;
-    res.render("session", {
-      csrfToken: req.csrfToken(),
-      title: `${req.params.sport} Sport`,
-      sport: req.params.sport,
-      oldSessions: oldSessions,
-      newSessions: newSessions,
-      admin: admin,
-      displayPrompt: true,
-    });
-  } catch (error) {
-    console.log(error);
-    res.locals.messages = req.flash("error", `Sport does not exist`);
-    res.redirect("/sports");
-  }
-});
-
-// Get Create Session Page
-app.get("/sports/:sport/new-session", isLoggedIn, async (req, res) => {
-  try {
-    await Sport.getSportId(req.params.sport);
-    let admin = req.user.admin;
-    res.render("new-session", {
-      csrfToken: req.csrfToken(),
-      title: `New ${req.params.sport} Session`,
-      sport: req.params.sport,
-      admin: admin,
-    });
-  } catch (error) {
-    console.log(error);
-    res.locals.messages = req.flash("error", `Sport does not exist`);
-    res.redirect("/sports");
-  }
-});
-
-// Post Create Session Page
-app.post("/sports/:sport/new-session", isLoggedIn, async (req, res) => {
-  try {
-    const sportId = await Sport.getSportId(req.params.sport);
-    if (new Date(req.body.date) < new Date()) {
-      res.locals.messages = req.flash("error", `Date cannot be in the past`);
-      res.redirect("/sports/" + req.params.sport + "/new-session");
-    } else if (req.body.remaining < 0) {
-      res.locals.messages = req.flash(
-        "error",
-        `Remaining spots cannot be less than 0`
-      );
-      res.redirect("/sports/" + req.params.sport + "/new-session");
-    } else {
-      const session = await Session.createNewSession(
-        req.user.id,
-        req.body,
-        sportId
-      );
-      res.locals.messages = req.flash(
-        "success",
-        "Session successfully created"
-      );
-      res.redirect("/sports/" + req.params.sport + "/" + session.id);
+  async (request, response) => {
+    try {
+      await Create_session.remove_session(request.params.del.slice(1));
+      await Players_names.remove_session_player(request.params.del.slice(1));
+      return response.json(true);
+    } catch (err) {
+      return response.status(422).json(err);
     }
-  } catch (error) {
-    console.log(error);
-    res.locals.messages = req.flash("error", error.errors[0].message);
-    res.redirect("/sports/" + req.params.sport + "/new-session");
+  }
+);
+app.delete(
+  "/session_des/:id/del/:delid/:player_count",
+
+  async (request, response) => {
+    try {
+      await Players_names.remove_player(request.params.delid.slice(1));
+      await Create_session.update_player_count(
+        request.params.id.slice(1),
+        localStorage.getItem("current_sports_name"),
+        request.params.player_count.slice(1)
+      );
+      console.log("count" + request.params.player_count);
+      return response.json(true);
+    } catch (err) {
+      return response.status(422).json(err);
+    }
+  }
+);
+app.get("/update_sports/:id/:name", async (request, response) => {
+  if (request.accepts("html")) {
+    response.render("update_sports_name", {
+      title: localStorage.getItem("current_sports_name"),
+      sports_name: request.params.name.slice(1),
+      id: request.params.id,
+      csrfToken: request.csrfToken(),
+    });
+  } else {
+    response.join("/");
   }
 });
-
-// Get Edit Session Page
-app.get("/sports/:sport/:id/edit-session", isLoggedIn, async (req, res) => {
-  try {
-    await Sport.getSportId(req.params.sport);
-    let session = await sessionGenerator(
-      await Session.getSessionById(req.params.id),
-      true
-    );
-    let admin = req.user.admin;
-    if (session[0].date < new Date()) {
-      res.locals.messages = req.flash("info", `Session already over`);
-      res.redirect("/sports/" + req.params.sport + "/" + req.params.id);
-    } else if (session[0].cancel) {
-      res.locals.messages = req.flash("info", `Session already cancelled`);
-      res.redirect("/sports/" + req.params.sport + "/" + req.params.id);
-    } else if (session[0].userId === req.user.id) {
-      res.render("edit-session", {
-        csrfToken: req.csrfToken(),
-        title: `Edit ${req.params.sport} #${req.params.id} Session`,
-        session: session,
-        admin: admin,
+app.get(
+  "/update_session/:id/:sdes/:sdate/:time/:totalplayer/:existing_player",
+  async (request, response) => {
+    response.render("update_session", {
+      title: localStorage.getItem("current_sports_name"),
+      id: request.params.id.slice(1),
+      session_des: request.params.sdes.slice(1),
+      session_date: request.params.sdate.slice(1),
+      session_time: request.params.time.slice(1),
+      session_players: request.params.totalplayer.slice(1),
+      existing_player: request.params.existing_player.slice(1),
+      csrfToken: request.csrfToken(),
+    });
+  }
+);
+app.get("/resetpassword", async (request, response) => {
+  response.render("user_resetPassword", {
+    title: "Reset password",
+    check_admin_are_not: localStorage.getItem("admin_name")
+      ? localStorage.getItem("admin_name")
+      : 0,
+    csrfToken: request.csrfToken(),
+  });
+});
+app.post("/reset", connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+  if (req.body.newPassword.length < 8) {
+    req.flash("error", "Password length should be atleast 8");
+    return res.redirect("/resetpassword");
+  }
+  const hashedNewPwd = await bcrypt.hash(req.body.newPassword, saltRounds);
+  console.log("password", hashedNewPwd);
+  if (await bcrypt.compare(req.body.oldPassword, req.user.password)) {
+    try {
+      User.findOne({ where: { email: req.user.email } }).then((user) => {
+        user.resetPassword(hashedNewPwd);
       });
-    } else {
-      res.locals.messages = req.flash("info", `User not authorized`);
-      res.redirect("/sports/" + req.params.sport + "/" + req.params.id);
-    }
-  } catch (error) {
-    console.log(error);
-    res.locals.messages = req.flash("error", `Sport or Session does not exist`);
-    res.redirect("/sports");
-  }
-});
-
-// Post Edit Session Page
-app.post("/sports/:sport/:id/edit-session", isLoggedIn, async (req, res) => {
-  try {
-    await Sport.getSportId(req.params.sport);
-    if (req.body.date < new Date()) {
-      res.locals.messages = req.flash("error", `Date cannot be in the past`);
-      res.redirect(
-        "/sports/" + req.params.sport + "/" + req.params.id + "/edit-session"
-      );
-    } else if (req.body.remaining < 0) {
-      res.locals.messages = req.flash(
-        "error",
-        `Remaining spots cannot be less than 0`
-      );
-      res.redirect(
-        "/sports/" + req.params.sport + "/" + req.params.id + "/edit-session"
-      );
-    } else {
-      await Session.updateSession(req.params.id, req.body);
-      res.locals.messages = req.flash(
-        "success",
-        "Session successfully updated"
-      );
-      res.redirect("/sports/" + req.params.sport + "/" + req.params.id);
-    }
-  } catch (error) {
-    console.log(error);
-    res.locals.messages = req.flash("error", error.errors[0].message);
-    res.redirect(
-      "/sports/" + req.params.sport + "/" + req.params.id + "/edit-session"
-    );
-  }
-});
-
-// Get Session Info Page
-app.get("/sports/:sport/:id", isLoggedIn, async (req, res) => {
-  try {
-    await Sport.getSportId(req.params.sport);
-    const session = await sessionGenerator(
-      await Session.getSessionById(req.params.id),
-      true,
-      true,
-      req.user.id
-    );
-    let admin = req.user.admin;
-    res.render("session-info", {
-      csrfToken: req.csrfToken(),
-      title: `${req.params.sport} #${req.params.id} Session`,
-      session: session,
-      user: req.user.id,
-      admin: admin,
-    });
-  } catch (error) {
-    console.log(error);
-    res.locals.messages = req.flash("error", `Sport or Session does not exist`);
-    res.redirect("/sports");
-  }
-});
-
-// Get Join Session Info Page
-app.get("/sports/:sport/:id/join", isLoggedIn, async (req, res) => {
-  try {
-    await Sport.getSportId(req.params.sport);
-    const session = await Session.getSessionById(req.params.id);
-    if (session.date < new Date()) {
-      res.locals.messages = req.flash("info", `Session already over`);
-      res.redirect("/sports/" + req.params.sport + "/" + req.params.id);
-    } else if (session.cancel) {
-      res.locals.messages = req.flash("info", `Session already cancelled`);
-      res.redirect("/sports/" + req.params.sport + "/" + req.params.id);
-    } else if (session.membersList.includes(req.user.email)) {
-      res.locals.messages = req.flash("info", `Already joined the Session`);
-      res.redirect("/sports/" + req.params.sport + "/" + req.params.id);
-    } else if (session.remaining < 1) {
-      res.locals.messages = req.flash("info", `All slots are booked`);
-      res.redirect("/sports/" + req.params.sport + "/" + req.params.id);
-    } else {
-      await Session.joinSession(req.user.email, req.params.id);
-      res.locals.messages = req.flash("success", `Joined the Session`);
-      res.redirect("/sports/" + req.params.sport + "/" + req.params.id);
-    }
-  } catch (error) {
-    console.log(error);
-    res.locals.messages = req.flash("error", `Sport or Session does not exist`);
-    res.redirect("/sports");
-  }
-});
-
-// Get Leave Session Info Page
-app.get("/sports/:sport/:id/:index/leave", isLoggedIn, async (req, res) => {
-  try {
-    await Sport.getSportId(req.params.sport);
-    const session = await Session.getSessionById(req.params.id);
-    if (session.date < new Date()) {
-      res.locals.messages = req.flash("info", `Session already over`);
-      res.redirect("/sports/" + req.params.sport + "/" + req.params.id);
-    } else if (session.cancel) {
-      res.locals.messages = req.flash("info", `Session already cancelled`);
-      res.redirect("/sports/" + req.params.sport + "/" + req.params.id);
-    } else if (session.membersList.length < req.params.index) {
-      res.locals.messages = req.flash("info", `User not present in Session`);
-      res.redirect("/sports/" + req.params.sport + "/" + req.params.id);
-    } else if (
-      session.userId === req.user.id ||
-      session.membersList.indexOf(req.user.email) === Number(req.params.index)
-    ) {
-      await Session.leaveSession(req.params.index, req.params.id);
-      res.locals.messages = req.flash("success", `Left the Session`);
-      res.redirect("/sports/" + req.params.sport + "/" + req.params.id);
-    } else {
-      res.locals.messages = req.flash("info", `User not authorized`);
-      res.redirect("/sports/" + req.params.sport + "/" + req.params.id);
-    }
-  } catch (error) {
-    console.log(error);
-    res.locals.messages = req.flash("error", `Sport or Session does not exist`);
-    res.redirect("/sports");
-  }
-});
-
-// Get Cancel Session Info Page
-app.get("/sports/:sport/:id/cancel-session", isLoggedIn, async (req, res) => {
-  try {
-    await Sport.getSportId(req.params.sport);
-    let session = await sessionGenerator(
-      await Session.getSessionById(req.params.id),
-      true
-    );
-    let admin = req.user.admin;
-    if (session[0].date < new Date()) {
-      res.locals.messages = req.flash("info", `Session already over`);
-      res.redirect("/sports/" + req.params.sport + "/" + req.params.id);
-    } else if (session[0].cancel) {
-      res.locals.messages = req.flash("info", `Session already cancelled`);
-      res.redirect("/sports/" + req.params.sport + "/" + req.params.id);
-    } else if (session[0].userId === req.user.id) {
-      res.render("cancel", {
-        csrfToken: req.csrfToken(),
-        title: `Cancel ${req.params.sport} #${req.params.id} Session`,
-        session: session,
-        admin: admin,
-      });
-    } else {
-      res.locals.messages = req.flash("info", `User not authorized`);
-      res.redirect("/sports/" + req.params.sport + "/" + req.params.id);
-    }
-  } catch (error) {
-    console.log(error);
-    res.locals.messages = req.flash("error", `Sport or Session does not exist`);
-    res.redirect("/sports");
-  }
-});
-
-// Post Cancel Session Info Page
-app.post("/sports/:sport/:id/cancel-session", isLoggedIn, async (req, res) => {
-  try {
-    await Sport.getSportId(req.params.sport);
-    await Session.cancelSession(
-      req.params.id,
-      capitalizeString(req.body.reason)
-    );
-    res.locals.messages = req.flash("success", "Session has been cancelled");
-    res.redirect("/sports/" + req.params.sport + "/" + req.params.id);
-  } catch (error) {
-    console.log(error);
-    res.locals.messages = req.flash("error", `Sport or Session does not exist`);
-    res.redirect("/sports/" + req.params.sport);
-  }
-});
-
-// Get report Page
-app.get("/report", isAdmin, async (req, res) => {
-  const admin = req.user.admin;
-  const user = capitalizeName(req.user);
-  if (!(req.query.start && req.query.end)) {
-    const year = new Date().getFullYear();
-    req.query.start = `${year}-01-01`;
-    req.query.end = `${year}-12-31`;
-  }
-  const sessions = await sessionGenerator(
-    await Session.getSessionByDate(req.query),
-    true,
-    true,
-    req.user.id
-  );
-  const sessionCount = sportSessions(sessions);
-  res.render("report", {
-    csrfToken: req.csrfToken(),
-    title: "Report",
-    admin: admin,
-    user: user,
-    date: [req.query.start, req.query.end],
-    sessions: sessions,
-    sessionCount: sessionCount,
-    displayPrompt: true,
-  });
-});
-
-// Get Profile Page
-app.get("/profile", isLoggedIn, async (req, res) => {
-  res.render("profile", {
-    csrfToken: req.csrfToken(),
-    title: "Profile",
-    admin: req.user.admin,
-    user: capitalizeName(req.user),
-    userDetail: req.user,
-  });
-});
-
-// Get Edit Profile Page
-app.get("/profile/edit", isLoggedIn, async (req, res) => {
-  let admin = req.user.admin;
-  res.render("edit-user", {
-    csrfToken: req.csrfToken(),
-    title: "Edit Profile",
-    admin: admin,
-    user: req.user,
-  });
-});
-
-// Post Edit Profile Page
-app.post("/profile/edit", isLoggedIn, async (req, res) => {
-  try {
-    await User.updateUser(req.user.id, req.body);
-    res.locals.messages = req.flash("success", "Profile Updated");
-    res.redirect("/profile");
-  } catch (error) {
-    console.log(error);
-    res.locals.messages = req.flash("error", error.errors[0].message);
-    res.redirect("/profile/edit");
-  }
-});
-
-// Get Change Password Page
-app.get("/profile/change-password", isLoggedIn, async (req, res) => {
-  let admin = req.user.admin;
-  res.render("edit-pass", {
-    csrfToken: req.csrfToken(),
-    title: "Change Password",
-    admin: admin,
-  });
-});
-
-// Post Change Password Page
-app.post("/profile/change-password", isLoggedIn, async (req, res) => {
-  try {
-    if (!(await bcrypt.compare(req.body.oldPassword, req.user.password))) {
-      res.locals.messages = req.flash("error", "Old Password is incorrect");
-      res.redirect("/profile/change-password");
-    } else if (await bcrypt.compare(req.body.newPassword, req.user.password)) {
-      res.locals.messages = req.flash(
-        "error",
-        "Old and New Passwords are same"
-      );
-      res.redirect("/profile/change-password");
-    } else {
-      await User.updatePassword(
-        req.user.id,
-        await bcrypt.hash(req.body.newPassword, 10)
-      );
-      res.locals.messages = req.flash("success", "Password Updated");
-      res.redirect("/profile");
-    }
-  } catch (error) {
-    console.log(error);
-    res.locals.messages = req.flash("error", error.errors[0].message);
-    res.redirect("/profile/change-password");
-  }
-});
-
-// Get Logout Page
-app.get("/logout", (req, res, next) => {
-  req.logout((error) => {
-    if (error) {
+      req.flash("success", "Password changed successfully");
+      return res.redirect("/resetpassword");
+    } catch (error) {
       console.log(error);
-      return next(error);
+      return res.status(422).json(error);
     }
-    res.redirect("/");
-  });
+  } else {
+    req.flash("error", "Old password does not match");
+    return res.redirect("/resetpassword");
+  }
 });
 
-// Export app
 module.exports = app;
