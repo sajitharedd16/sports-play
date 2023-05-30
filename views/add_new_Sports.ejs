@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="csrf-token" content="<%= csrfToken %>">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sports Scheduler</title>
+  <title>Sports Play</title>
 
   <head>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -15,31 +15,31 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
     <style>
       body {
-        width: 100%;
         height: 100vh;
-        background: linear-gradient(rgba(0, 0, 0, .3), rgba(0, 0, 0, 1)), url('./bg1.jpg');
-        background-size: cover;
+        width: 100%;
         background-position: center;
+        background: Plum;
+        background-size: cover;
       }
       #sportsNav {
-        display: inline-flex;
         color: white;
+        display: inline-flex;
       }
       #sportsNav li {
         list-style: none;
-        padding: 7px;
-        margin-left: 18px;
         cursor: pointer;
-      }
-      #sportsNav li:hover {
-        background-color: white;
-        border-radius: 32px;
-        color: black;
-        font-weight: bold;
-        transition: 0.7s;
+        margin-left: 16px;
+        padding: 6px;
       }
       #sportsNav li a {
         text-decoration: none;
+      }
+      #sportsNav li:hover {
+        background-color: white;
+        font-weight: bold;
+        color: black;
+        border-radius: 30px;
+        transition: 0.6s;
       }
       .container {
         max-width: 550px;
@@ -49,9 +49,9 @@
         border-color: red;
       }
       .list-unstyled li {
-        font-size: 13px;
-        padding: 4px 0 0;
+        font-size: 12px;
         color: red;
+        padding: 3px 0 0;
       }
     </style>
   </head>
@@ -59,24 +59,24 @@
 <body>
   <!-- <nav class="navbar" style="background-color: black; position: sticky">
     <div class="container-fluid">
-      <a class="navbar-brand fw-bold" style="color: yellow">Sports Scheduler</a>
+      <a class="navbar-brand fw-bold" style="color: yellow">Sports Play</a>
       <ul id="sportsNav">
         <li>Sign out</li>
       </ul>
     </div>
   </nav> -->
-  <section style="width:100%; height:100vh;display: flex; justify-content: center; align-items: center;">
+  <section style="width:100%; justify-content: center; align-items: center; height:100vh;display: flex; ">
 
     <div class="container mt-5">
       <div class="card">
-        <h5 class="card-header text-center">New Sport<h5>
+        <h5 class="card-header text-center">Add New Sport Here<h5>
             <div class="card-body">
               <form action="/admin_add_sports" method="post">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                 <input type="hidden" name="update_sports_name" value="<%= update_sports_name %>" />
                 <input type="hidden" name="update_sports_id" value="<%= update_sports_id %>" />
                 <div class="form-group">
-                  <label>Please enter new sport</label>
+                  <label>Enter your new sport name</label>
                   <input type="text" class="form-control" name="sports_name" id="inputName"
                     placeholder="Enter Sports Name">
                   <!-- Error -->
