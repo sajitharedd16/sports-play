@@ -1,0 +1,208 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+main {
+    margin: 5px;
+}
+
+main > h1 {
+    font-size: 30px;
+    font-weight: 400;
+    color: #545454;
+    margin: 5px 0 15px 0;
+}
+
+.user {
+    font-size: 32px;
+    font-weight: 600;
+    color: #545454;
+}
+
+main div > h1 {
+    font-size: 30px;
+}
+
+.breadcrumb {
+    margin: 0;
+    position: relative;
+    padding: 0;
+}
+
+.breadcrumb ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    list-style: none;
+    margin-top: 5px;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+.breadcrumb ul li {
+    margin: 0 2px;
+}
+
+.breadcrumb ul li a {
+    text-decoration: none;
+    color: #565656;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.breadcrumb ul li a:hover {
+    color: #435dec;
+    text-decoration: underline;
+}
+
+.new-sport,
+.edit-profile,
+.change-password,
+.delete,
+.add,
+.cancel,
+.new-session,
+.edit-session,
+.cancel-session,
+.edit-sport,
+.view-session,
+.join,
+.leave,
+.expel,
+.submit {
+    border: 1px solid #333;
+    border-radius: 12px;
+    margin: 10px;
+    padding: 11px;
+    font-size: 17px;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.new-sport:hover,
+.edit-profile:hover,
+.change-password:hover,
+.delete:hover,
+.add:hover,
+.cancel:hover,
+.new-session:hover,
+.edit-session:hover,
+.cancel-session:hover,
+.edit-sport:hover,
+.expel:hover,
+.view-session:hover,
+.join:hover,
+.leave:hover,
+.submit:hover {
+    font-size: 20px;
+}
+
+.view-session,
+.leave,
+.expel {
+    padding: 6px;
+}
+
+.view-session:hover,
+.leave:hover,
+.expel:hover {
+    padding: 8px;
+}
+
+.cancel-session,
+.delete {
+    background-color: red;
+    color: white;
+}
+
+.no-sessions,
+.full,
+.no-sports,
+.no-members,
+.empty {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ff0000;
+    margin: 5px 0 15px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.full,
+.empty {
+    margin: 0;
+}
+
+.no-sports {
+    font-size: 25px;
+    display: block;
+    margin: 0 auto;
+}
+
+.notify {
+    display: block;
+    position: absolute;
+    font-size: 20px;
+    width: 100vw;
+    top: 44px;
+}
+
+.notify .error p,
+.notify .success p,
+.notify .info p {
+    border-radius: 5px 0 0 5px;
+    margin-left: auto;
+    padding: 5px 6px 5px 12px;
+    box-sizing: border-box;
+    word-break: break-word;
+    width: 300px;
+    height: fit-content;
+    color: white;
+    text-align: left;
+    animation: flash 1s both ease-in-out 5s;
+}
+
+.notify .error p {
+    background-color: #d07676;
+}
+
+.notify .success p {
+    background-color: #1bac1b;
+}
+
+.notify .info p {
+    background-color: #6a6ac5;
+}
+
+.notify > div {
+    margin: 0;
+    padding: 0;
+}
+
+.close {
+    color: white;
+    font-size: 18px;
+    margin-left: 7px;
+    font-weight: 900;
+    margin-right: 7px;
+    background: red;
+    padding: 0 5px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+@keyframes flash {
+    0% {
+        margin-right: 0;
+    }
+    100% {
+        margin-right: -300px;
+    }
+}
