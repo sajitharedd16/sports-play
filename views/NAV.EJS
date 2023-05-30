@@ -1,0 +1,52 @@
+<nav>
+    <div class="logo">
+        <a href="/dashboard">
+            <div class="logo-img">
+                <img alt="logo" src="../../../images/logo-signup.png">
+            </div>
+            <div class="logo-text">
+                <h1>Sport Dash</h1>
+            </div>
+        </a>
+    </div>
+    <div class="links">
+        <ul class="links-ul">
+            <% if(link === 'dashboard'){ %>
+                <li><a href="/dashboard"><span class="clicked">Dashboard</span></a></li>
+            <% }else{ %>
+                <li><a href="/dashboard">Dashboard</a></li>
+            <% } %>
+            <% if(link === 'sports'){ %>
+                <li><a href="/sports"><span class="clicked">Sports</span></a></li>
+            <% }else{ %>
+                <li><a href="/sports">Sports</a></li>
+            <% } %>
+            <% if(admin){ %>
+                <% if(link === 'report'){ %>
+                    <li><a href="/report"><span class="clicked">Report</span></a></li>
+                <% }else{ %>
+                    <li><a href="/report">Report</a></li>
+                <% } %>
+            <% } %>
+        </ul>
+        <div class="account">
+            <select id="account-select">
+                <option value="account" selected disabled>Account</option>
+                <option value="profile">Profile</option>
+                <option id="logout" value="logout">Logout</option>
+            </select>
+        </div>
+    </div>
+    <script>
+        const accountSelect = document.getElementById('account-select');
+        accountSelect.addEventListener('change', (e) => {
+            const value = e.target.value;
+            accountSelect.selectedIndex = 0;
+            if (value === 'profile') {
+                window.location.href = '/profile';
+            } else if (value === 'logout') {
+                window.location.href = '/logout';
+            }
+        })
+    </script>
+</nav>
