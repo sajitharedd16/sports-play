@@ -40,11 +40,11 @@ describe("Todo Application", function () {
     let res = await agent.get("/signup");
     const csrfToken = extractCsrfToken(res);
     res = await agent.post("/users").send({
-      firstName: "Aaleti",
-      lastName: "Sajitha",
+      firstName: "aaleti",
+      lastName: "sajitha",
       email: "sajithareddyaaleti16@gmail.com",
       password: "12345678",
-      "_csrf": csrfToken, 
+      "_csrf": csrfToken, //prettier-ignore
     });
     expect(res.statusCode).toBe(302);
   });
@@ -67,7 +67,7 @@ describe("Todo Application", function () {
       title: "Buy milk",
       dueDate: new Date().toISOString(),
       completed: false,
-      "_csrf": csrfToken, 
+      "_csrf": csrfToken, // prettier-ignore
     });
     expect(response.statusCode).toBe(302);
   });
@@ -81,7 +81,7 @@ describe("Todo Application", function () {
       title: "Buy milk",
       dueDate: new Date().toISOString(),
       completed: false,
-      "_csrf": csrfToken, 
+      "_csrf": csrfToken, // prettier-ignore
     });
 
     const groupedTodosResponse = await agent
@@ -98,7 +98,7 @@ describe("Todo Application", function () {
       .put(`/todos/${latestTodo.id}`)
       .send({
         completed: true,
-        "_csrf": csrfToken, 
+        "_csrf": csrfToken, // prettier-ignore
       });
     const parsedUpdateResponse = JSON.parse(markCompleteResponse.text);
     expect(parsedUpdateResponse.completed).toBe(true);
@@ -112,7 +112,7 @@ describe("Todo Application", function () {
       title: "Buy Chocklate",
       dueDate: new Date().toISOString(),
       completed: false,
-      "_csrf": csrfToken, 
+      "_csrf": csrfToken, // prettier-ignore
     });
 
     const groupedTodosResponse = await agent
@@ -127,9 +127,9 @@ describe("Todo Application", function () {
     csrfToken = extractCsrfToken(res);
 
     const deleteResponse = await agent.delete(`/todos/${latestTodo.id}`).send({
-      "_csrf": csrfToken, 
+      "_csrf": csrfToken, // prettier-ignore
     });
     const parsedUpdateResponse = JSON.parse(deleteResponse.text);
-    expect(parsedUpdateResponse).toBe(true); 
+    expect(parsedUpdateResponse).toBe(true); //prettier-ignore
   });
 });
