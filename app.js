@@ -97,9 +97,7 @@ app.get("/", async (request, response) => {
       title: "Sports manage!",
     });
   } else {
-    response.redirect("/admin_login", {
-      title: "Sports manage!",
-    });
+    response.redirect("/admin_login");
   }
 });
 app.get("/admin_login", async (request, response) => {
