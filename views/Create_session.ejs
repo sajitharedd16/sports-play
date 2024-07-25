@@ -8,25 +8,28 @@
     <meta name="csrf-token" content="<%= csrfToken %>">
     <style>
         body {
-            height: 100vh;
             width: 100%;
-            background-position: center;
-            background: #DB7093;
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, .3), rgba(0, 0, 0, 1)), url('./bg1.jpg');
             background-size: cover;
+            background-position: center;
         }
+
+        .container {
+            max-width: 550px;
+        }
+
         .has-error label,
         .has-error input,
         .has-error textarea {
             color: red;
             border-color: red;
         }
-        .container {
-            max-width: 550px;
-        }
+
         .list-unstyled li {
-            font-size: 12px;
+            font-size: 13px;
+            padding: 4px 0 0;
             color: red;
-            padding: 3px 0 0;
         }
     </style>
 </head>
@@ -34,7 +37,7 @@
 <body>
     <div class="container mt-5">
         <div class="card">
-            <h5 class="card-header text-center">Create session for Game: <%= title %></h5>
+            <h5 class="card-header text-center">Create session for: <%= title %></h5>
             <div class="card-body">
                 <form action="/create_session" method="post">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
@@ -48,14 +51,14 @@
                                     <% } %>
                     </h3>
                     <div class="form-group">
-                        <label>Where will this session be performed</label>
-                        <input type="text" name="match_desc" class="form-control" placeholder="Enter the Area">
+                        <label>Where will this session be played</label>
+                        <input type="text" name="match_desc" class="form-control" placeholder="Enter Address">
                         <!-- Error -->
                         <div class="help-block with-errors"></div>
                     </div>
                     <div class="form-group">
                         <label>When will this sport session will be held?</label>
-                        <input type="date" class="form-control" name="match_date" placeholder="Enter the date">
+                        <input type="date" class="form-control" name="match_date" placeholder="Enter date">
                         <!-- Error -->
                         <div class="help-block with-errors"></div>
                     </div>
@@ -67,10 +70,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label>How many more players do you require?</label>
+                        <label>How many more players do you need?</label>
                         <div class="form-group">
                             <input type="number" data-minlength="4" class="form-control" min="1" max="30"
-                                name="no_player" placeholder="How many no.of players?" />
+                                name="no_player" placeholder="How many players?" />
                             <!-- Error -->
                             <div class="help-block with-errors"></div>
                         </div>
