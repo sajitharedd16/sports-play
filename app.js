@@ -97,7 +97,7 @@ app.get("/", async (request, response) => {
       title: "Sports manage!",
     });
   } else {
-    response.render("webfirst_page", {
+    response.redirect("/admin_login", {
       title: "Sports manage!",
     });
   }
