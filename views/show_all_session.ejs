@@ -10,14 +10,14 @@
   </div>
 
   <p style="width: 97%" class="fw-bold h3 text-white my-4">
-    Approaching Sessions for
+    Upcoming Sessions for
     <span style="font-family: cursive; color: gold">
       <%= title %> #<%= data.length %>
     </span>
   </p>
   <%if(data.length==0){%>
-    <h1 style="color: red; font-family: 'fantsy; font-weight: bold;">No sessions
-      are added ,yet!</h1>
+    <h1 style="color: red; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: bold;">No session
+      has been added ,yet!</h1>
     <%}%>
       <div class="grid">
         <% for(var i=0; i < data.length; i++) { %>
@@ -33,15 +33,17 @@
           ">
               <% if(data[i].add_player==data[i].total_players-1){ %>
                 <p style="padding: 5px; margin: 5px">
-                  <%= data[i].session_date %><span style="color:rgb(67, 67, 67); font-size: 18px;">@</span>
+                  <%= data[i].session_date %><span style="color:rgb(67, 67, 67); font-size: 19px;">@</span>
                     <%= data[i].time %>
                 </p>
+
+
             </div>
             <p style="
-                font-size: 1.5vw;
+                font-size: 1.6vw;
                 font-weight: bold;
-                margin-top: 11px;
-                margin-left: 23px;
+                margin-top: 12px;
+                margin-left: 25px;
                 color: red;
               ">
               Last Slot
@@ -51,6 +53,8 @@
                 <%= data[i].session_date %><span style="color:rgb(67, 67, 67); font-size: 19px;">@</span>
                   <%= data[i].time %>
               </p>
+
+
           </div>
           <p style="
                 font-size: 1.6vw;
@@ -62,21 +66,25 @@
             Full Slot
           </p>
           <%}else{%>
+
             <p style="padding: 5px; margin: 5px">
               <%= data[i].session_date %><span style="color:rgb(67, 67, 67); font-size: 19px;">@</span>
                 <%= data[i].time %>
             </p>
+
+
       </div>
       <p style="
-            font-size: 1.5vw;
+            font-size: 1.6vw;
             font-weight: bold;
-            margin-top: 11px;
-            margin-left: 23px;
+            margin-top: 12px;
+            margin-left: 25px;
           ">
         <%= data[i].total_players - data[i].add_player %> Slot
       </p>
       <%}%>
         </div>
+
         <%}%>
           </div>
           <p style="width: 97%; color: rgb(255, 9, 9)" class="fw-bold h3 my-4">
@@ -102,12 +110,14 @@
                       <%= post_session[i].session_date %><span style="color:rgb(67, 67, 67); font-size: 19px;">@</span>
                         <%= post_session[i].time %>
                     </p>
+
+
                 </div>
                 <p style="
-                font-size: 1.5vw;
+                font-size: 1.6vw;
                 font-weight: bold;
-                margin-top: 11px;
-                margin-left: 23px;
+                margin-top: 12px;
+                margin-left: 25px;
                 color: red;
               ">
                   Last Slot
@@ -117,27 +127,32 @@
                     <%= post_session[i].session_date %><span style="color:rgb(67, 67, 67); font-size: 19px;">@</span>
                       <%= post_session[i].time %>
                   </p>
+
+
               </div>
               <p style="
-                font-size: 1.5vw;
+                font-size: 1.6vw;
                 font-weight: bold;
-                margin-top: 11px;
-                margin-left: 23px;
+                margin-top: 12px;
+                margin-left: 25px;
                 color: red;
               ">
                 Full Slot
               </p>
               <%}else{%>
+
                 <p style="padding: 5px; margin: 5px;text-decoration: line-through; color: red;">
                   <%= post_session[i].session_date %><span style="color:rgb(67, 67, 67); font-size: 19px;">@</span>
                     <%= post_session[i].time %>
                 </p>
+
+
           </div>
           <p style="
-            font-size: 1.5vw;
+            font-size: 1.6vw;
             font-weight: bold;
-            margin-top: 11px;
-            margin-left: 23px;
+            margin-top: 12px;
+            margin-left: 25px;
           ">
             <%= post_session[i].total_players - post_session[i].add_player %> Slot
           </p>
